@@ -83,14 +83,14 @@ resources:
     properties:
       group: ansible
       inputs:
-      - name: admininstrator
+      - name: admin_mail
       config: |
               ---
               - name: Apply Galaxy Roles
                 hosts: localhost
                 connection: local
                 roles:
-                  - { role: galaxycloud, galaxy_admin: {{administrator}} }
+                  - { role: galaxycloud }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
@@ -100,7 +100,7 @@ resources:
       config: {get_resource: galaxy_config}
       server: {get_resource: galaxy_server}
       input_values:
-        administrator: {get_param: admin_mailaddr}
+        admin_mail: {get_param: admin_mailaddr}
 
   #__________________________________
   # galaxy server deployment
