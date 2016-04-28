@@ -99,8 +99,8 @@ resources:
     properties:
       config: {get_resource: galaxy_config}
       server: {get_resource: galaxy_server}
-    input_values:
-      administrator: {get_param: admin_mailaddr}
+      input_values:
+        administrator: {get_param: admin_mailaddr}
 
   #__________________________________
   # galaxy server deployment
