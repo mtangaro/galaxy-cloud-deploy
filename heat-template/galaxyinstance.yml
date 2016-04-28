@@ -90,7 +90,7 @@ resources:
                 hosts: localhost
                 connection: local
                 roles:
-                  - { role: galaxycloud, galaxy_admin: "administrator" }
+                  - { role: galaxycloud, galaxy_admin: {{administrator}} }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
