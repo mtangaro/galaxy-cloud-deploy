@@ -4,6 +4,8 @@ Modifications to the upstream  nginx package to add the upload (and possibly oth
 
 The package is built for CentOS7.
 
+ONLY x86_64
+
 INSTALL:
 ========
 
