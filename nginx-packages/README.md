@@ -11,7 +11,7 @@ INSTALL:
 
 Clone rpmbuild directory and
 
-move rpmbuild in home dir
+move rpmbuild in home directory
 
 rpmbuild -ba ~/rpmbuild/SPECS/nginx.spec
 
