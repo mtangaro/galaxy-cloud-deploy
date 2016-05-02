@@ -89,6 +89,7 @@ resources:
               - name: Apply Galaxy Roles
                 hosts: localhost
                 connection: local
+                remote_user: galaxy
                 roles:
                   - { role: galaxycloud }
 
