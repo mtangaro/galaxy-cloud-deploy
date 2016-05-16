@@ -24,7 +24,7 @@ parameters:
     type: string
     label: Instance Type
     description: Type of instance (flavor) to be used
-    default: small
+    default: small #4cpu-4GB-20dsk
   availability_zone:
     type: string
     description: The Availability Zone to launch the instance.
