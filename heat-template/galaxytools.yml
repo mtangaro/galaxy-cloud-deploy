@@ -1,0 +1,196 @@
+heat_template_version: 2014-10-16
+
+description: >
+  This template deploy a CentOS 7 instance with Galaxy production environment:
+  Galaxy + NGINX + postgresql + uwsgi + PROFTPd
+  Reference data volume and user volume are attached
+  Reference data are downloaded
+
+parameters:
+  key_name:
+    type: string
+    description: Name of a KeyPair
+    default: mtangaro-key #ROBOT
+  vm_name:
+    type: string
+    label: VM name
+    default: stack-vm
+  image_id:
+    type: string
+    label: Image ID
+    description: Image to be used for compute instance
+    default: 01e14343-bc15-4109-8c14-0432be9757e0 #CentOS 7 HEAT-1602-v0.4 (marco)
+  instance_type:
+    type: string
+    label: Instance Type
+    description: Type of instance (flavor) to be used
+    default: small #4cpu-4GB-20dsk
+  availability_zone:
+    type: string
+    description: The Availability Zone to launch the instance.
+    default: nova
+  volume_size:
+    type: number
+    description: Size of the volume to be created.
+    default: 1
+  net_id:
+    type: string
+    description: ID of public sub network into which servers get deployed
+    default: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333
+  mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /mnt/workingdir
+  admin_mailaddr:
+    type: string
+    description: Galaxy administrator mail address
+    default: "admin@indigo-datacloud.com"
+
+resources:
+
+  #________________________________
+  # create galaxy user (boot configuration)
+  boot_config:
+    type: OS::Heat::CloudConfig
+    properties:
+      cloud_config:
+        user: galaxy
+
+  cloud_init_userdata:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+      - config: {get_resource: boot_config}
+  
+  #________________________________
+  # ansible roles config
+  ansible_setup_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      config: { get_file: setup.sh }
+
+  ansible_setup_deployment:
+    type: OS::Heat::SoftwareDeployment
+    properties:
+      config: {get_resource: ansible_setup_config}
+      server: {get_resource: galaxy_server}  
+
+  #________________________________
+  # galaxy softwareconfig
+  galaxy_config:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ansible
+      inputs:
+      - name: admin_mail
+      config: |
+              ---
+              - name: Apply Galaxy Roles
+                hosts: localhost
+                connection: local
+                become: yes
+                become_user: galaxy
+                roles:
+                  - { role: galaxycloud }
+
+  galaxy_deployment:
+    type: OS::Heat::SoftwareDeployment
+    depends_on:
+      - ansible_setup_deployment
+    properties:
+      config: {get_resource: galaxy_config}
+      server: {get_resource: galaxy_server}
+      input_values:
+        admin_mail: {get_param: admin_mailaddr}
+
+  #__________________________________
+  # galaxy server deployment
+  galaxy_server:
+    type: OS::Nova::Server
+    properties:
+      name: { get_param: vm_name }
+      key_name: { get_param: key_name }
+      image: { get_param: image_id }
+      availability_zone: { get_param: availability_zone }
+      flavor: { get_param: instance_type }
+      networks:
+        - network: { get_param: net_id }
+      security_groups: [ { get_resource: server_security_group } ]
+      user_data_format: SOFTWARE_CONFIG
+      user_data: {get_resource: cloud_init_userdata}
+
+#  # User data volume
+#
+#  cinder_volume:
+#    type: OS::Cinder::Volume
+#    properties:
+#      size: { get_param: volume_size }
+#      availability_zone: { get_param: availability_zone }
+#
+#  volume_attachment:
+#    type: OS::Cinder::VolumeAttachment
+#    properties:
+#      volume_id: { get_resource: cinder_volume }
+#      instance_uuid: { get_resource: galaxy_server }
+#      mountpoint: null
+#
+#  # Reference data volume  
+#
+#  refdata_cinder_volume:
+#    type: OS::Cinder::Volume
+#    properties:
+#      size: 200 #FIXME configurable?
+#      availability_zone: { get_param: availability_zone }
+#
+#  refdata_volume_attachment:
+#    type: OS::Cinder::VolumeAttachment
+#    properties:
+#      volume_id: { get_resource: refdata_cinder_volume }
+#      instance_uuid: { get_resource: galaxy_server }
+#      mountpoint: null
+
+  server_security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: Add security group rules for server
+      name: security-group
+      rules:
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 22
+          port_range_max: 22
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: icmp
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 8080
+          port_range_max: 8080
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 21
+          port_range_max: 21
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 30000
+          port_range_max: 40000
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+
+
+outputs:
+  vmIp:
+    description: The IP address of the deployed instance
+    value: { get_attr: [galaxy_server, first_address] }
+  vmUuid:
+    description: Resource ID assigned to the newly created instance
+    value: { get_resource: galaxy_server }
+  vmName:
+    description: vm name 
+    value: { get_param: vm_name }
+  volumeUuid:
+    description: Resource ID assigned to the newly created volume attached to instance
+    value: { get_resource: cinder_volume }
+
