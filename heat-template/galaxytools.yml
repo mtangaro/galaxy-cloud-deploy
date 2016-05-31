@@ -93,6 +93,17 @@ resources:
                 become_user: galaxy
                 roles:
                   - { role: galaxycloud }
+              - name: Install Galaxy tools
+                host: localhost
+                connection: local
+                become: yes
+                become_user: galaxy
+                vars:
+                  galaxy_tools_tool_list_files: [ "files/tool_list.yaml" ]
+                  galaxy_tools_galaxy_instance_url: http://127.0.0.1:8080/
+                  # galaxy_tools_api_key: <API key for Galaxy admin user>
+                roles:
+                  - { role: galaxy_tools }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
