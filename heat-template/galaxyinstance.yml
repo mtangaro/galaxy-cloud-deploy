@@ -45,14 +45,11 @@ parameters:
     type: string
     description: Galaxy administrator username
     default: "admin"
-  admin_password:
-    type: string
-    description: Galaxy administrator password
-    default: "admin_password"
   admin_mailaddr:
     type: string
     description: Galaxy administrator mail address
     default: "admin@indigo-datacloud.eu"
+
 
 resources:
 
@@ -100,7 +97,7 @@ resources:
                 become: yes
                 become_user: galaxy
                 roles:
-                  - { role: galaxycloud}
+                  - { role: galaxycloud }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
@@ -111,7 +108,6 @@ resources:
       server: {get_resource: galaxy_server}
       input_values:
         galaxy_admin_username: {get_param: admin_username}
-        galaxy_admin_password: {get_param: admin_password}
         galaxy_admin_mail: {get_param: admin_mailaddr}
 
   #__________________________________
