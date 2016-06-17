@@ -41,10 +41,15 @@ parameters:
     type: string
     description: The directory to provide to the user
     default: /mnt/workingdir
+  admin_username:
+    type: string
+    description: Galaxy administrator username
+    default: "admin"
   admin_mailaddr:
     type: string
     description: Galaxy administrator mail address
-    default: "admin@indigo-datacloud.com"
+    default: "admin@indigo-datacloud.eu"
+
 
 resources:
 
@@ -102,7 +107,8 @@ resources:
       config: {get_resource: galaxy_config}
       server: {get_resource: galaxy_server}
       input_values:
-        admin_mail: {get_param: admin_mailaddr}
+        galaxy_admin_username: {get_param: admin_username}
+        galaxy_admin_mail: {get_param: admin_mailaddr}
 
   #__________________________________
   # galaxy server deployment
