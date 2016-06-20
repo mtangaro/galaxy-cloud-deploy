@@ -1,0 +1,18 @@
+heat_template_version: 2014-10-16
+
+description: setup Galaxy + NGINX + Postgresql + uWSGI + PROFTPd
+
+resources:
+  vm_os:
+    type: galaxyinstance.yaml
+    properties:
+      key_name: mtangaro-key
+      vm_name: galaxy-indigo-test
+      image_id: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # Generic CentOS 7 cloud image, 2016-06-07
+      instance_type: small #large #4cpu-4GB-20dsk
+      availability_zone: nova
+      volume_size: 1
+      net_id: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333i #pub-ip
+      mountpoint: /mnt/workingdir
+      admin_username: "mtangaro"
+      admin_mailaddr: "ma.tangaro@gmail.com"
