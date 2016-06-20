@@ -18,7 +18,7 @@ parameters:
   image_id:
     type: string
     label: Image ID
-    description: Image to be used for compute instance: SoftwareConfig Image (ansible, puppet, salt, cfn-init, docker-compose) hooks enabled image, Generic CentOS 7 Cloud image, 2016-06-07
+    description: "Image to be used for compute instance: SoftwareConfig Image (ansible, puppet, salt, cfn-init, docker-compose) hooks enabled image, Generic CentOS 7 Cloud image, 2016-06-07"
     default: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # CentOS7-x86_64-SoftwareConfig-20160607
   instance_type:
     type: string
