@@ -10,7 +10,7 @@ parameters:
   key_name:
     type: string
     description: Name of a KeyPair
-    default: mtangaro-key #ROBOT
+    default: ROBOT
   vm_name:
     type: string
     label: VM name
@@ -18,13 +18,13 @@ parameters:
   image_id:
     type: string
     label: Image ID
-    description: Image to be used for compute instance
-    default: 01e14343-bc15-4109-8c14-0432be9757e0 #CentOS 7 HEAT-1602-v0.4 (marco)
+    description: "Image to be used for compute instance: SoftwareConfig Image (ansible, puppet, salt, cfn-init, docker-compose) hooks enabled image, Generic CentOS 7 Cloud image, 2016-06-07"
+    default: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # CentOS7-x86_64-SoftwareConfig-20160607
   instance_type:
     type: string
     label: Instance Type
     description: Type of instance (flavor) to be used
-    default: small #4cpu-4GB-20dsk
+    default: small
   availability_zone:
     type: string
     description: The Availability Zone to launch the instance.
@@ -196,7 +196,7 @@ outputs:
   vmName:
     description: vm name 
     value: { get_param: vm_name }
-  volumeUuid:
-    description: Resource ID assigned to the newly created volume attached to instance
-    value: { get_resource: cinder_volume }
+#  volumeUuid:
+#    description: Resource ID assigned to the newly created volume attached to instance
+#    value: { get_resource: cinder_volume }
 
