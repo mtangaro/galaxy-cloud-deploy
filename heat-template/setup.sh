@@ -18,8 +18,8 @@ cd /tmp/galaxycloud && git checkout devel
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
 # Install galaxy-tool playbook and  galaxyproject/ansible-galaxy-tools
-git clone --recursive https://github.com/mtangaro/galaxycloud-tools-playbook.git /tmp/galaxy-tools
-cp -r /tmp/galaxy-tools /etc/ansible/roles/
+git clone --recursive https://github.com/mtangaro/galaxycloud-tools-playbook.git /tmp/galaxycloud-tools
+cp -r /tmp/galaxycloud-tools/roles/ansible-galaxy-tools /etc/ansible/roles/galaxy-tools
 
 # Enable ansible log file
 sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\' /etc/ansible/ansible.cfg
