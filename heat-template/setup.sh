@@ -1,13 +1,26 @@
 #!/bin/bash
 
-# copy ansible roles
+#######################################
+# Copy ansible roles
+#
+# This script install Ansible and copy to /etc/ansible/roles
+# the ansible-role-galaxycloud and related playbooks
+#######################################
 
+# Install Ansible
 yum install -y epel-release
-yum install -y ansible
+yum update -y
+yum install -y ansible git
 
+# Install ansible-role-galaxycloud
 git clone https://github.com/mtangaro/ansible-role-galaxycloud.git /tmp/galaxycloud
 cd /tmp/galaxycloud && git checkout devel
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
-#enable ansible log file
+# Install galaxyproject/ansible-galaxy-tools
+git clone --recursive https://github.com/galaxyproject/ansible-galaxy-tools.git /tmp/galaxy-tools
+cp -r /tmp/galaxy-tools /etc/ansible/roles/
+
+# Enable ansible log file
 sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\' /etc/ansible/ansible.cfg
+
