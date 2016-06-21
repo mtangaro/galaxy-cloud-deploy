@@ -17,8 +17,8 @@ git clone https://github.com/mtangaro/ansible-role-galaxycloud.git /tmp/galaxycl
 cd /tmp/galaxycloud && git checkout devel
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
-# Install galaxyproject/ansible-galaxy-tools
-git clone --recursive https://github.com/galaxyproject/ansible-galaxy-tools.git /tmp/galaxy-tools
+# Install galaxy-tool playbook and  galaxyproject/ansible-galaxy-tools
+git clone --recursive https://github.com/mtangaro/galaxycloud-tools-playbook.git /tmp/galaxy-tools
 cp -r /tmp/galaxy-tools /etc/ansible/roles/
 
 # Enable ansible log file
