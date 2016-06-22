@@ -49,7 +49,10 @@ parameters:
     type: string
     description: Galaxy administrator mail address
     default: "admin@indigo-datacloud.eu"
-
+  flavor:
+    type: string
+    description: Galaxy flavor for tools installation
+    default: "galaxy-NGS"
 
 resources:
 
@@ -110,7 +113,7 @@ resources:
       input_values:
         galaxy_admin_username: {get_param: admin_username}
         galaxy_admin_mail: {get_param: admin_mailaddr}
-        galaxy_flavor: {"galaxy-NGS"}
+        galaxy_flavor: {get_param: flavor}
   #__________________________________
   # galaxy server deployment
   galaxy_server:
@@ -140,7 +143,7 @@ resources:
 #    properties:
 #      volume_id: { get_resource: cinder_volume }
 #      instance_uuid: { get_resource: galaxy_server }
-#      mountpoint: null
+#      mountpoint: nul
 #
 #  # Reference data volume  
 #
