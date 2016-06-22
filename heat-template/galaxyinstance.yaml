@@ -98,6 +98,7 @@ resources:
                 become_user: galaxy
                 roles:
                   - { role: galaxycloud }
+              - include: galaxycloud-tools.yml
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
