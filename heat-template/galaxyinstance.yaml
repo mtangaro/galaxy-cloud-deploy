@@ -52,7 +52,7 @@ parameters:
   flavor:
     type: string
     description: Galaxy flavor for tools installation
-    default: "galaxy-NGS"
+    default: "galaxy-no-tools"
 
 resources:
 
@@ -91,17 +91,11 @@ resources:
     properties:
       group: ansible
       inputs:
-      - name: admin_mail
-      config: |
-              ---
-              - name: Apply Galaxy Roles
-                hosts: localhost
-                connection: local
-                become: yes
-                become_user: galaxy
-                roles:
-                  - { role: galaxycloud }
-              - include: galaxycloud-tools.yml
+      - name: galaxy_admin_username
+      - name: galaxy_admin_mail
+      - name: galaxy_flavor
+      config:
+        get_file: play.yml
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment

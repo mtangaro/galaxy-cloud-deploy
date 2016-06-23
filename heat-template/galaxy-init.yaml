@@ -16,3 +16,4 @@ resources:
       mountpoint: /mnt/workingdir
       admin_username: "mtangaro"
       admin_mailaddr: "ma.tangaro@gmail.com"
+      flavor: "galaxy-NGS"
