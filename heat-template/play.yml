@@ -6,3 +6,19 @@
   become_user: galaxy
   roles:
     - { role: galaxycloud }
+
+- name: Apply Galaxy Tool Role
+  hosts: localhost
+  gather_facts: False
+  connection: local
+  become: yes
+  become_user: galaxy
+  pre_tasks:
+  - include_vars: "/etc/ansible/roles/galaxycloud/defaults/main.yml"
+    when: "{{galaxy_flavor}} != galaxy-sno-tools"
+  vars:
+    galaxy_tools_tool_list_files: [ "/etc/ansible/files/{{galaxy_flavor}}-tool-list.yml" ]
+    galaxy_tools_galaxy_instance_url: "{{galaxy_instance_url}}"
+    galaxy_tools_api_key: "{{GALAXY_ADMIN_API_KEY}}"
+  roles:
+    - { role: galaxy-tools, when: "{{galaxy_flavor}} != galaxy-no-tools" }
