@@ -108,8 +108,7 @@ resources:
       - name: galaxy_admin_username
       - name: galaxy_admin_mail
       - name: galaxy_flavor
-      config:
-        get_file: play.yml
+      config: { get_file: play.yml }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
