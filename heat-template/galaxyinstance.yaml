@@ -35,14 +35,22 @@ parameters:
     type: number
     description: Size of the volume to be created.
     default: 1
-  net_id:
-    type: string
-    description: ID of public sub network into which servers get deployed
-    default: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333
   mountpoint:
     type: string
     description: The directory to provide to the user
     default: /mnt/userdata
+  ref_volume_size:
+    type: number
+    description: Size of the volume to be created.
+    default: 1
+  ref_mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /mnt/refdata
+  net_id:
+    type: string
+    description: ID of public sub network into which servers get deployed
+    default: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333
   admin_username:
     type: string
     description: Galaxy administrator username
@@ -95,7 +103,7 @@ resources:
       input_values:
         userdata_mountpoint: { get_param: mountpoint }
         userdata_volid: { get_resource: userdata_cinder_volume }
-        refdata_mountpoint: /mnt/refdata
+        refdata_mountpoint:  { get_param: ref_mountpoint }
         refdata_volid: { get_resource: refdata_cinder_volume }
 
   #________________________________
@@ -157,7 +165,7 @@ resources:
   refdata_cinder_volume:
     type: OS::Cinder::Volume
     properties:
-      size: 1
+      size: { get_param: ref_volume_size }
       availability_zone: { get_param: availability_zone }
 
   refdata_volume_attachment:
