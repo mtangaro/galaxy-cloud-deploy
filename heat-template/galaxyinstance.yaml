@@ -6,6 +6,8 @@ description: >
   Reference data volume and user volume are attached
   Reference data are downloaded
 
+
+##################################
 parameters:
   key_name:
     type: string
@@ -33,14 +35,22 @@ parameters:
     type: number
     description: Size of the volume to be created.
     default: 1
+  mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /mnt/userdata
+  ref_volume_size:
+    type: number
+    description: Size of the volume to be created.
+    default: 1
+  ref_mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /mnt/refdata
   net_id:
     type: string
     description: ID of public sub network into which servers get deployed
     default: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333
-  mountpoint:
-    type: string
-    description: The directory to provide to the user
-    default: /mnt/workingdir
   admin_username:
     type: string
     description: Galaxy administrator username
@@ -54,6 +64,8 @@ parameters:
     description: Galaxy flavor for tools installation
     default: "galaxy-no-tools"
 
+
+##################################
 resources:
 
   #________________________________
@@ -71,11 +83,16 @@ resources:
       - config: {get_resource: boot_config}
   
   #________________________________
-  # ansible roles config
+  # mountpoints and ansible roles config
   ansible_setup_config:
     type: OS::Heat::SoftwareConfig
     properties:
       group: script
+      inputs:
+      - name: userdata_mountpoint
+      - name: userdata_volid
+      - name: refdata_mountpoint
+      - name: refdata_volid
       config: { get_file: setup.sh }
 
   ansible_setup_deployment:
@@ -83,6 +100,11 @@ resources:
     properties:
       config: {get_resource: ansible_setup_config}
       server: {get_resource: galaxy_server}  
+      input_values:
+        userdata_mountpoint: { get_param: mountpoint }
+        userdata_volid: { get_resource: userdata_cinder_volume }
+        refdata_mountpoint:  { get_param: ref_mountpoint }
+        refdata_volid: { get_resource: refdata_cinder_volume }
 
   #________________________________
   # galaxy softwareconfig
@@ -94,8 +116,7 @@ resources:
       - name: galaxy_admin_username
       - name: galaxy_admin_mail
       - name: galaxy_flavor
-      config:
-        get_file: play.yml
+      config: { get_file: play.yml }
 
   galaxy_deployment:
     type: OS::Heat::SoftwareDeployment
@@ -124,36 +145,38 @@ resources:
       user_data_format: SOFTWARE_CONFIG
       user_data: {get_resource: cloud_init_userdata}
 
-#  # User data volume
-#
-#  cinder_volume:
-#    type: OS::Cinder::Volume
-#    properties:
-#      size: { get_param: volume_size }
-#      availability_zone: { get_param: availability_zone }
-#
-#  volume_attachment:
-#    type: OS::Cinder::VolumeAttachment
-#    properties:
-#      volume_id: { get_resource: cinder_volume }
-#      instance_uuid: { get_resource: galaxy_server }
-#      mountpoint: nul
-#
-#  # Reference data volume  
-#
-#  refdata_cinder_volume:
-#    type: OS::Cinder::Volume
-#    properties:
-#      size: 200 #FIXME configurable?
-#      availability_zone: { get_param: availability_zone }
-#
-#  refdata_volume_attachment:
-#    type: OS::Cinder::VolumeAttachment
-#    properties:
-#      volume_id: { get_resource: refdata_cinder_volume }
-#      instance_uuid: { get_resource: galaxy_server }
-#      mountpoint: null
+  #__________________________________
+  # User data volume
+  userdata_cinder_volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: volume_size }
+      availability_zone: { get_param: availability_zone }
 
+  userdata_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: userdata_cinder_volume }
+      instance_uuid: { get_resource: galaxy_server }
+      mountpoint: null
+
+  #__________________________________
+  # Reference data volume  
+  refdata_cinder_volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: ref_volume_size }
+      availability_zone: { get_param: availability_zone }
+
+  refdata_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: refdata_cinder_volume }
+      instance_uuid: { get_resource: galaxy_server }
+      mountpoint: null
+
+  #__________________________________
+  # Security group  
   server_security_group:
     type: OS::Neutron::SecurityGroup
     properties:
@@ -183,7 +206,7 @@ resources:
           port_range_min: 80
           port_range_max: 80
 
-
+##################################
 outputs:
   vmIp:
     description: The IP address of the deployed instance
@@ -194,7 +217,7 @@ outputs:
   vmName:
     description: vm name 
     value: { get_param: vm_name }
-#  volumeUuid:
-#    description: Resource ID assigned to the newly created volume attached to instance
-#    value: { get_resource: cinder_volume }
+  volumeUuid:
+    description: Resource ID assigned to the newly created volume attached to instance
+    value: { get_resource: userdata_cinder_volume }
 
