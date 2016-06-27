@@ -4,7 +4,7 @@
 # Mount external volumes
 #######################################
 
-#Allow user to use UserData volume
+#Allow user to use User-Data volume
 voldata_id=$userdata_volid
 voldata_dev="/dev/disk/by-id/virtio-$(echo ${voldata_id} | cut -c -20)"
 mkdir -p $userdata_mountpoint
@@ -13,7 +13,7 @@ echo "Successfully device mounted (working dir)"
 mkdir -p $userdata_mountpoint/galaxy
 chown -R galaxy:galaxy $userdata_mountpoint/galaxy
 
-##Allow user to use ReferenceData volume
+##Allow user to use Reference-Data volume
 ref_voldata_id=$refdata_volid
 ref_voldata_dev="/dev/disk/by-id/virtio-$(echo ${ref_voldata_id} | cut -c -20)"
 mkdir -p $refdata_mountpoint
@@ -36,7 +36,7 @@ yum update -y
 yum install -y ansible git
 
 # Install ansible-role-galaxycloud
-git clone https://github.com/mtangaro/ansible-role-galaxycloud.git /tmp/galaxycloud
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud
 cd /tmp/galaxycloud && git checkout master
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
