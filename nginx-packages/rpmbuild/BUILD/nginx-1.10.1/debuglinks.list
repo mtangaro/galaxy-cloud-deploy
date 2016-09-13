@@ -1,0 +1,17 @@
+/usr/lib/debug/.build-id/01/10bd5d959f3240048ae9e893e5edb3acf590a7 /usr/lib64/perl5/vendor_perl/auto/nginx/nginx.so
+/usr/lib/debug/.build-id/01/10bd5d959f3240048ae9e893e5edb3acf590a7.debug /usr/lib/debug/usr/lib64/perl5/vendor_perl/auto/nginx/nginx.so.debug
+/usr/lib/debug/.build-id/f1/50ae1ce19b5a210d5a99614cf2e1e77864dc02 /usr/lib64/nginx/modules/ngx_http_image_filter_module.so
+/usr/lib/debug/.build-id/f1/50ae1ce19b5a210d5a99614cf2e1e77864dc02.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_http_image_filter_module.so.debug
+/usr/lib/debug/.build-id/40/6f4bec01a4e64cca9d5b9032842f851885eaa2 /usr/lib64/nginx/modules/ngx_mail_module.so
+/usr/lib/debug/.build-id/40/6f4bec01a4e64cca9d5b9032842f851885eaa2.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_mail_module.so.debug
+/usr/lib/debug/.build-id/45/3bf2720c5b3bab507077ddb4a5376dd35329a2 /usr/lib64/nginx/modules/ngx_http_xslt_filter_module.so
+/usr/lib/debug/.build-id/45/3bf2720c5b3bab507077ddb4a5376dd35329a2.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_http_xslt_filter_module.so.debug
+/usr/lib/debug/.build-id/0b/514fa9f0894df083c20967d689ff6f789269f1 /usr/lib64/nginx/modules/ngx_http_perl_module.so
+/usr/lib/debug/.build-id/0b/514fa9f0894df083c20967d689ff6f789269f1.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_http_perl_module.so.debug
+/usr/lib/debug/.build-id/bd/6559c2bba979e7289d7f1325cb1fa2d82c4d0e /usr/lib64/nginx/modules/ngx_http_geoip_module.so
+/usr/lib/debug/.build-id/bd/6559c2bba979e7289d7f1325cb1fa2d82c4d0e.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_http_geoip_module.so.debug
+/usr/lib/debug/.build-id/10/97f838e4b36159f6356f69695ae7ef5d3b065f /usr/lib64/nginx/modules/ngx_stream_module.so
+/usr/lib/debug/.build-id/10/97f838e4b36159f6356f69695ae7ef5d3b065f.debug /usr/lib/debug/usr/lib64/nginx/modules/ngx_stream_module.so.debug
+/usr/lib/debug/.build-id/20/31f91391d2292d2240498d397e101f7f7ae50b /usr/sbin/nginx
+/usr/lib/debug/.build-id/20/31f91391d2292d2240498d397e101f7f7ae50b.debug /usr/lib/debug/usr/sbin/nginx.debug
+/usr/lib/debug/.build-id/29/db6d069125f31975452720f70b8a691e47e53c.debug /usr/lib/debug/.dwz/nginx-1.10.1-1.el7.centos.x86_64

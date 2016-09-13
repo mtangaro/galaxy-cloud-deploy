@@ -1,0 +1,8 @@
+.//usr/lib64/perl5/vendor_perl/auto/nginx/nginx.so
+.//usr/lib64/nginx/modules/ngx_http_image_filter_module.so
+.//usr/lib64/nginx/modules/ngx_mail_module.so
+.//usr/lib64/nginx/modules/ngx_http_xslt_filter_module.so
+.//usr/lib64/nginx/modules/ngx_http_perl_module.so
+.//usr/lib64/nginx/modules/ngx_http_geoip_module.so
+.//usr/lib64/nginx/modules/ngx_stream_module.so
+.//usr/sbin/nginx
