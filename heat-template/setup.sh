@@ -32,7 +32,8 @@
 # Install Ansible
 yum install -y epel-release
 yum update -y
-yum install -y ansible git
+yum install -y ansible #--enablerepo=epel-testing 
+yum install -y git
 
 # Install ansible-role-galaxycloud
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud
