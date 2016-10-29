@@ -37,7 +37,7 @@ yum install -y git
 
 # Install ansible-role-galaxycloud
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud
-cd /tmp/galaxycloud && git checkout devel
+cd /tmp/galaxycloud && git checkout tools-install
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
 # Enable ansible log file
