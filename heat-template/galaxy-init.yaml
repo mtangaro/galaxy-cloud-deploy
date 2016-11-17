@@ -9,7 +9,7 @@ resources:
       key_name: mtangaro-key
       vm_name: centos-development-image
       image_id: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # Generic CentOS 7 cloud image, 2016-06-07
-      instance_type: 4cpu-4GB-20dsk
+      instance_type: small #4cpu-4GB-20dsk
       availability_zone: nova
       volume_size: 1
       mountpoint: /export
