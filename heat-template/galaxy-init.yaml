@@ -7,9 +7,10 @@ resources:
     type: galaxyinstance.yaml
     properties:
       key_name: mtangaro-key
-      vm_name: centos-development-image
-      image_id: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # Generic CentOS 7 cloud image, 2016-06-07
-      instance_type: small #4cpu-4GB-20dsk
+      vm_name: reditools-new
+      #image_id: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # Generic CentOS 7 cloud image, 2016-06-07
+      image_id: 73331fa7-eb1e-474e-8cc2-4fc3a8024d48
+      instance_type: xlarge #4cpu-4GB-20dsk
       availability_zone: nova
       volume_size: 1
       mountpoint: /export
