@@ -29,11 +29,25 @@
 # the ansible-role-galaxycloud and related playbooks
 #######################################
 
+
 # Install Ansible
-yum install -y epel-release
-yum update -y
-yum install -y ansible #--enablerepo=epel-testing 
-yum install -y git
+
+if [[ -r /etc/os-release ]]; then
+    . /etc/os-release
+    if [[ $ID = ubuntu ]]; then
+        apt-get -y install software-properties-common
+        apt-add-repository -y ppa:ansible/ansible
+        apt-get -y update
+        apt-get -y install ansible git
+    else
+        yum install -y epel-release
+        yum update -y
+        yum install -y ansible #--enablerepo=epel-testing 
+        yum install -y git
+    fi
+else
+    echo "Not running a distribution with /etc/os-release available"
+fi
 
 # Install ansible-role-galaxycloud
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud
