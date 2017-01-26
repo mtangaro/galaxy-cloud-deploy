@@ -42,11 +42,11 @@ if [[ -r /etc/os-release ]]; then
         apt-get -y install software-properties-common &>> $LOGFILE
         apt-add-repository -y ppa:ansible/ansible &>> $LOGFILE
         apt-get -y update &>> $LOGFILE
-        apt-get -y install ansible git &>> $LOGFILE
+        apt-get -y install ansible git vim &>> $LOGFILE
     else
         echo "Distribution: CentOS. Using yum" > $LOGFILE
         yum install -y epel-release &>> $LOGFILE
-        yum update -y &>> $LOGFILE
+        #yum update -y &>> $LOGFILE
         yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing 
         yum install -y git vim  &>> $LOGFILE
     fi
