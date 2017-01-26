@@ -32,26 +32,32 @@
 
 # Install Ansible
 
+LOGFILE="/tmp/setup.log"
+
 if [[ -r /etc/os-release ]]; then
     . /etc/os-release
-    if [[ $ID = ubuntu ]]; then
-        apt-get -y install software-properties-common
-        apt-add-repository -y ppa:ansible/ansible
-        apt-get -y update
-        apt-get -y install ansible git
+    echo $ID > $LOGFILE
+    if [ "$ID" = "ubuntu" ]; then
+        echo "Distribution: Ubuntu. Using apt" > $LOGFILE
+        apt-get -y install software-properties-common &>> $LOGFILE
+        apt-add-repository -y ppa:ansible/ansible &>> $LOGFILE
+        apt-get -y update &>> $LOGFILE
+        apt-get -y install ansible git &>> $LOGFILE
     else
-        yum install -y epel-release
-        yum update -y
-        yum install -y ansible #--enablerepo=epel-testing 
-        yum install -y git
+        echo "Distribution: CentOS. Using yum" > $LOGFILE
+        yum install -y epel-release &>> $LOGFILE
+        yum update -y &>> $LOGFILE
+        yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing 
+        yum install -y git vim  &>> $LOGFILE
     fi
 else
-    echo "Not running a distribution with /etc/os-release available"
+    echo "Not running a distribution with /etc/os-release available" > $LOGFILE
 fi
 
 # Install ansible-role-galaxycloud
-git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud
-cd /tmp/galaxycloud && git checkout master
+BRANCH="master"
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud &>> /tmp/setup.log
+cd /tmp/galaxycloud && git checkout $BRANCH &>> $LOGFILE
 cp -r /tmp/galaxycloud /etc/ansible/roles/
 
 # Enable ansible log file
