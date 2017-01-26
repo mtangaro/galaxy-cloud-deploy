@@ -5,18 +5,25 @@
   roles:
     - { role: galaxycloud, GALAXY_ADMIN_EMAIL: "{{galaxy_admin_mail}}", GALAXY_ADMIN_USERNAME: "{{galaxy_admin_username}}" , galaxy_flavor: "{{galaxy_flavor}}", galaxy_instance_key_pub: "{{galaxy_instance_key_pub}}" }
 
-#- name: Apply Galaxy Tool Role
+#- name: Install tools
 #  hosts: localhost
-#  gather_facts: False
 #  connection: local
-#  become: yes
-#  become_user: galaxy
+#  gather_facts: False
 #  pre_tasks:
-#  - include_vars: "/etc/ansible/roles/galaxycloud/defaults/main.yml"
-#    when: galaxy_flavor != "galaxy-no-tools"
+#    - set_fact: galaxy_flavor="{{galaxy_flavor}}"
+#    - set_fact: galaxy_instance_url="90.147.170."
+#    - name: Wait Galaxy is up
+#      uri: url="http://{{galaxy_instance_url}}/galaxy/"
+#      register: result
+#      until: result.status == 200
+#      retries: 30
+#      delay: 10
+#    - name: Get tool-list
+#      get_url: url="https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" dest="/tmp/"
+#      when: galaxy_flavor != 'galaxy-no-tools'
 #  vars:
-#    galaxy_tools_tool_list_files: [ "/etc/ansible/files/{{galaxy_flavor}}-tool-list.yml" ]
-#    galaxy_tools_galaxy_instance_url: "{{galaxy_instance_url}}"
-#    galaxy_tools_api_key: "{{GALAXY_ADMIN_API_KEY}}"
+#      galaxy_tools_tool_list_files: [ "/home/ubuntu/indigo-dc/Galaxy-flavors-recipes/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" ]
+#      galaxy_tools_galaxy_instance_url: "http://{{galaxy_instance_url}}/galaxy/"
+#      galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
 #  roles:
-#    - { role: galaxy-tools, when: galaxy_flavor != "galaxy-no-tools" }
+#    - { role: galaxy-tools, when: galaxy_flavor != 'galaxy-no-tools' }
