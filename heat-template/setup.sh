@@ -55,7 +55,9 @@ else
 fi
 
 # Install ansible-role-galaxycloud
-BRANCH="master"
+
+BRANCH="devel"
+
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud &>> /tmp/setup.log
 cd /tmp/galaxycloud && git checkout $BRANCH &>> $LOGFILE
 cp -r /tmp/galaxycloud /etc/ansible/roles/

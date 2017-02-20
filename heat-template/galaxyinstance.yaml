@@ -59,6 +59,10 @@ parameters:
     type: string
     description: Galaxy administrator mail address
     default: "admin@indigo-datacloud.eu"
+  release:
+    type: string
+    description: Galaxy version
+    default: "master"
   flavor:
     type: string
     description: Galaxy flavor for tools installation
@@ -103,6 +107,7 @@ resources:
       inputs:
       - name: galaxy_admin_username
       - name: galaxy_admin_mail
+      - name: galaxy_release
       - name: galaxy_flavor
       - name: galaxy_instance_key_pub
       config: { get_file: playbook.yml }
@@ -117,6 +122,7 @@ resources:
       input_values:
         galaxy_admin_username: {get_param: admin_username}
         galaxy_admin_mail: {get_param: admin_mailaddr}
+        galaxy_release: {get_param: release}
         galaxy_flavor: {get_param: flavor}
         galaxy_instance_key_pub: {get_param: ssh_pub_key}
   #__________________________________

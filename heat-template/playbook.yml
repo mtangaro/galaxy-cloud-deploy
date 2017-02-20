@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: galaxycloud, GALAXY_ADMIN_EMAIL: "{{galaxy_admin_mail}}", GALAXY_ADMIN_USERNAME: "{{galaxy_admin_username}}" , galaxy_flavor: "{{galaxy_flavor}}", galaxy_instance_key_pub: "{{galaxy_instance_key_pub}}" }
+    - { role: galaxycloud, GALAXY_ADMIN_EMAIL: "{{galaxy_admin_mail}}", GALAXY_ADMIN_USERNAME: "{{galaxy_admin_username}}" , GALAXY_VERSION: "{{ galaxy_release }}", galaxy_instance_key_pub: "{{galaxy_instance_key_pub}}" }
 
 #- name: Install tools
 #  hosts: localhost
