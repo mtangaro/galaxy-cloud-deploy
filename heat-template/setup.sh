@@ -54,13 +54,47 @@ else
     echo "Not running a distribution with /etc/os-release available" > $LOGFILE
 fi
 
-# Install ansible-role-galaxycloud
-
-BRANCH="devel"
-
-git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud &>> /tmp/setup.log
-cd /tmp/galaxycloud && git checkout $BRANCH &>> $LOGFILE
-cp -r /tmp/galaxycloud /etc/ansible/roles/
-
 # Enable ansible log file
 sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\' /etc/ansible/ansible.cfg
+
+#
+# Install Ansible roles
+#
+
+OS=true
+GALAXY=true
+TOOLS=true
+REFDATA=true
+
+###
+# 1. Install ansible-role-galaxycloud-os
+if $OS; then
+  git clone https://github.com/mtangaro/ansible-role-galaxycloud-os.git /tmp/galaxycloud-os &>> $LOGFILE
+  cd /tmp/galaxycloud-os && git checkout master &>> $LOGFILE
+  cp -r /tmp/galaxycloud-os /etc/ansible/roles/
+fi
+
+###
+# 2. Install ansible-role-galaxycloud
+BRANCH="devel"
+if $GALAXY; then
+  git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud &>> $LOGFILE
+  cd /tmp/galaxycloud && git checkout $BRANCH &>> $LOGFILE
+  cp -r /tmp/galaxycloud /etc/ansible/roles/
+fi
+
+###
+# 3. Install ansible-galaxy-tools
+if $TOOLS; then
+  git clone https://github.com/indigo-dc/ansible-galaxy-tools.git /tmp/galaxy-tools &>> $LOGFILE
+  cd /tmp/galaxy-tools && git checkout master &>> $LOGFILE
+  cp -r /tmp/galaxy-tools /etc/ansible/roles/
+fi
+
+###
+# 4. Install ansible-role-galaxycloud-refdata
+if $REFDATA; then
+  git clone https://github.com/mtangaro/ansible-role-galaxycloud-refdata.git /tmp/galaxycloud-refdata &>> $LOGFILE
+  cd /tmp/galaxycloud-refdata && git checkout master &>> $LOGFILE
+  cp -r /tmp/galaxycloud-refdata /etc/ansible/roles/
+fi
