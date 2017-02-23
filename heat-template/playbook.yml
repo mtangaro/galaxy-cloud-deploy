@@ -9,7 +9,7 @@
 - name: Install tools
   hosts: localhost
   connection: local
-  #gather_facts: False
+  ###gather_facts: False
   gather_subset: network # Only for testing
   pre_tasks:
     - name: Wait Galaxy is up
@@ -22,15 +22,14 @@
       get_url: url="https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" dest="/tmp/"
       when: galaxy_flavor != 'galaxy-no-tools'
   vars:
-      galaxy_tools_tool_list_files: [ "/home/ubuntu/indigo-dc/Galaxy-flavors-recipes/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" ]
+      galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
       galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
       galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
   roles:
     - { role: galaxy-tools, when: galaxy_flavor != 'galaxy-no-tools' }
 
 - name: Download reference data
-  remote_user: root
-  become_user: root
-  become: yes
+  hosts: localhost
+  connection: local
   roles:
     - { role: galaxycloud-refdata, galaxy_flavor: "{{ galaxy_flavor }}", get_refdata_from_onedata: false, get_refdata_from_swift_storage: true }
