@@ -7,11 +7,11 @@
 #---
 # Allow user to use User-Data volume
 
-#voldata_id=$userdata_volid
-#voldata_dev="/dev/disk/by-id/virtio-$(echo ${voldata_id} | cut -c -20)"
-#mkdir -p $userdata_mountpoint
-#mkfs.ext4 ${voldata_dev} && mount ${voldata_dev} $userdata_mountpoint || notify_err "Some problems occurred with block device (working dir)"
-#echo "Successfully device mounted (working dir)"
+voldata_id=$userdata_volid
+voldata_dev="/dev/disk/by-id/virtio-$(echo ${voldata_id} | cut -c -20)"
+mkdir -p $userdata_mountpoint
+mkfs.ext4 ${voldata_dev} && mount ${voldata_dev} $userdata_mountpoint || notify_err "Some problems occurred with block device (working dir)"
+echo "Successfully device mounted (working dir)"
 
 #---
 # Allow user to use Reference-Data volume
@@ -53,6 +53,10 @@ if [[ -r /etc/os-release ]]; then
 else
     echo "Not running a distribution with /etc/os-release available" > $LOGFILE
 fi
+
+# workaround for template module error on Ubuntu 14.04
+sed -i 's\^#remote_tmp     = ~/.ansible/tmp.*$\remote_tmp     = $HOME/.ansible/tmp\' /etc/ansible/ansible.cfg
+sed -i 's\^#local_tmp      = ~/.ansible/tmp.*$\local_tmp      = $HOME/.ansible/tmp\' /etc/ansible/ansible.cfg
 
 # Enable ansible log file
 sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\' /etc/ansible/ansible.cfg
