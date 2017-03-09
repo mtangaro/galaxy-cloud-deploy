@@ -80,7 +80,7 @@ fi
 
 ###
 # 2. Install ansible-role-galaxycloud
-BRANCH="master"
+BRANCH="devel"
 if $GALAXY; then
   git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /tmp/galaxycloud &>> $LOGFILE
   cd /tmp/galaxycloud && git checkout $BRANCH &>> $LOGFILE

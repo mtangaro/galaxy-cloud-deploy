@@ -18,6 +18,11 @@
       until: result.status == 200
       retries: 30
       delay: 10
+    - name: Install Galaxy tools dep
+      pip: name={{ item }}
+      with_items:
+        - pyyaml
+        - bioblend
     - name: Get tool-list
       get_url: url="https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" dest="/tmp/"
       when: galaxy_flavor != 'galaxy-no-tools'

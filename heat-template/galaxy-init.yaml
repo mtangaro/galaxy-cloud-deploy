@@ -1,4 +1,4 @@
-heat_template_version: 2014-10-16
+heat_template_version: 2016-04-08
 
 description: setup Galaxy + NGINX + Postgresql + uWSGI + PROFTPd
 
@@ -12,7 +12,7 @@ resources:
       #image_id: c5089f99-bc76-40e4-a891-5ff348b340b5 # Ubuntu 14.04 (HEAT)
       instance_type: small #4cpu-4GB-20dsk
       availability_zone: nova
-      volume_size: 1
+      volume_size: 10
       mountpoint: /export
       ref_volume_size: 1
       ref_mountpoint: /refdata
@@ -20,5 +20,5 @@ resources:
       admin_username: "mtangaro"
       admin_mailaddr: "ma.tangaro@gmail.com"
       release: "release_17.01" # "master" # Galaxy release version
-      flavor: "galaxy-no-tools"
+      flavor: "galaxy-TESTING"
       ssh_pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
