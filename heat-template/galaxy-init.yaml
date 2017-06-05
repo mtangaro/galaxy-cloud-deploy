@@ -19,10 +19,20 @@ resources:
       admin_username: "mtangaro"
       admin_mailaddr: "ma.tangaro@gmail.com"
       release: "release_17.01" # "master" # Galaxy release version
-      flavor: "galaxy-TESTING"
       ssh_pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
       # indigo-dc.galaxycloud-os
       os_storage: 'onedata'
       userdata_provider: 'indigo-wp3-onep.recas.ba.infn.it'
       userdata_token: 'MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzYmlkZW500aWZpZXIgaG5SZHR00ZXo4ODV00clZIY1NmcVNnMnhRZjBMREtHQmdVa2trdE42RGtmTQowMDFhY2lkIHRpbWUgPCAxNTI2OTc5ODAxCjAwMmZzaWduYXR1cmUglFgYYNlj01S9SvCecPjsRS022BCjruS4VQml3rr55b02mwK'
       userdata_space: 'galaxy'
+      # indigo-dc.galaxy-tools
+      flavor: "galaxy-TESTING"
+      # indigo-dc.galaxycloud-refdata
+      get_refdata: true
+      refdata_repository_name: 'elixir-italy.galaxy.refdata'
+      refdata_provider_type: 'cvmfs'
+      refdata_cvmfs_server_url: '90.147.102.186'
+      refdata_cvmfs_repository_name: 'elixir-italy.galaxy.refdata'
+      refdata_cvmfs_key_file: 'elixir-italy.galaxy.refdata.pub'
+      refdata_cvmfs_proxy_url: 'DIRECT'
+      #refdata_cvmfs_proxy_port: 80

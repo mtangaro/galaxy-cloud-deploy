@@ -41,19 +41,19 @@
     - role: indigo-dc.galaxy-tools
       when: galaxy_flavor != 'galaxy-no-tools'
 
-#- name: Download reference data
-#  hosts: localhost
-#  connection: local
-#  roles:
-#    - role: indigo-dc.galaxycloud-refdata
-#      galaxy_flavor: "{{ galaxy_flavor }}"
-#      get_refdata: '{{ get_refdata }}'
-#      refdata_repository_name: '{{ refdata_repository_name }}'
-#      refdata_provider_type: '{{ refdata_provider_type }}'
-#      refdata_provider: '{{ refdata_provider }}'
-#      refdata_token: '{{ refdata_token }}'
-#      refdata_cvmfs_server_url: '{{ refdata_cvmfs_server_url }}'
-#      refdata_cvmfs_repository_name: '{{ refdata_cvmfs_repository_name }}'
-#      refdata_cvmfs_key_file: '{{ refdata_cvmfs_key_file }}'
-#      refdata_cvmfs_proxy_url: 'DIRECT'
-#      #refdata_cvmfs_proxy_port: 80
+- name: Download reference data
+  hosts: localhost
+  connection: local
+  roles:
+    - role: indigo-dc.galaxycloud-refdata
+      galaxy_flavor: "{{ galaxy_flavor }}"
+      get_refdata: '{{ get_refdata }}'
+      refdata_repository_name: '{{ refdata_repository_name }}'
+      refdata_provider_type: '{{ refdata_provider_type }}'
+      refdata_provider: '{{ refdata_provider }}'
+      refdata_token: '{{ refdata_token }}'
+      refdata_cvmfs_server_url: '{{ refdata_cvmfs_server_url }}'
+      refdata_cvmfs_repository_name: '{{ refdata_cvmfs_repository_name }}'
+      refdata_cvmfs_key_file: '{{ refdata_cvmfs_key_file }}'
+      refdata_cvmfs_proxy_url: 'DIRECT'
+      #refdata_cvmfs_proxy_port: 80

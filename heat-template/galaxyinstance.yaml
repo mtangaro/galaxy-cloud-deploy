@@ -86,6 +86,10 @@ parameters:
     type: string
     description: Onedata space
     default: "galaxy"
+  get_refdata:
+    type: boolean
+    description: Install Reference data
+    default: true
   refdata_repository_name:
     type: string
     description: Onedata space name, CernVM-FS repository name or subdirectory downaload name
@@ -166,6 +170,16 @@ resources:
       - name: userdata_token
       - name: userdata_provider
       - name: userdata_space
+      - name: get_refdata
+      - name: refdata_repository_name
+      - name: refdata_provider_type
+      - name: refdata_provider
+      - name: refdata_token
+      - name: refdata_cvmfs_server_url
+      - name: refdata_cvmfs_repository_name
+      - name: refdata_cvmfs_key_file
+      - name: refdata_cvmfs_proxy_url
+      - name: refdata_cvmfs_proxy_port
       config: { get_file: playbook.yml }
 
   galaxy_deployment:
@@ -185,6 +199,18 @@ resources:
         userdata_token: { get_param: userdata_token }
         userdata_provider: { get_param: userdata_provider }
         userdata_space: { get_param: userdata_space }
+        get_refdata: { get_param: get_refdata }
+        refdata_repository_name: { get_param: refdata_repository_name }
+        refdata_provider_type: { get_param: refdata_provider_type }
+        refdata_provider: { get_param: refdata_provider }
+        refdata_token: { get_param: refdata_token }
+        refdata_cvmfs_server_url: { get_param: refdata_cvmfs_server_url }
+        refdata_cvmfs_repository_name: { get_param: refdata_cvmfs_repository_name }
+        refdata_cvmfs_key_file: { get_param: refdata_cvmfs_key_file }
+        refdata_cvmfs_proxy_url: { get_param: refdata_cvmfs_proxy_url }
+        refdata_cvmfs_proxy_port: { get_param: refdata_cvmfs_proxy_port }
+
+
   #__________________________________
   # galaxy server deployment
   galaxy_server:
