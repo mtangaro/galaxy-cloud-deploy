@@ -3,8 +3,20 @@
   hosts: localhost
   connection: local
   roles:
-    - { role: galaxycloud-os, GALAXY_ADMIN_EMAIL: "ma.tangaro@gmail.com", isolation_level: "encryption", galaxy_instance_key_pub: "{{ galaxy_instance_key_pub }}" }
-    - { role: galaxycloud, GALAXY_ADMIN_EMAIL: "{{galaxy_admin_mail}}", GALAXY_ADMIN_USERNAME: "{{galaxy_admin_username}}" , GALAXY_VERSION: "{{ galaxy_release }}", galaxy_instance_key_pub: "{{galaxy_instance_key_pub}}" }
+    - role: indigo-dc.galaxycloud-os
+      os_storage: '{{ os_storage }}'
+      GALAXY_ADMIN_EMAIL: '{{ galaxy_admin_mail }}'
+      userdata_provider: '{{ userdata_provider }}'
+      userdata_token: '{{ userdata_token }}'
+      userdata_space: '{{ userdata_space }}'
+      galaxy_instance_key_pub: "{{ galaxy_instance_key_pub }}"
+      #local_lrms: 'slurm'
+
+    - role: indigo-dc.galaxycloud
+      GALAXY_ADMIN_EMAIL: "{{ galaxy_admin_mail }}"
+      GALAXY_ADMIN_USERNAME: "{{ galaxy_admin_username }}" 
+      GALAXY_VERSION: "{{ galaxy_release }}"
+      galaxy_instance_key_pub: "{{ galaxy_instance_key_pub }}"
 
 - name: Install tools
   hosts: localhost
@@ -18,23 +30,30 @@
       until: result.status == 200
       retries: 30
       delay: 10
-    - name: Install Galaxy tools dep
-      pip: name={{ item }}
-      with_items:
-        - pyyaml
-        - bioblend
     - name: Get tool-list
       get_url: url="https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml" dest="/tmp/"
       when: galaxy_flavor != 'galaxy-no-tools'
   vars:
-      galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
-      galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
-      galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
+    galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
+    galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
+    galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
   roles:
-    - { role: galaxy-tools, when: galaxy_flavor != 'galaxy-no-tools' }
+    - role: indigo-dc.galaxy-tools
+      when: galaxy_flavor != 'galaxy-no-tools'
 
-- name: Download reference data
-  hosts: localhost
-  connection: local
-  roles:
-    - { role: galaxycloud-refdata, galaxy_flavor: "{{ galaxy_flavor }}", get_refdata_from_onedata: false, get_refdata_from_swift_storage: true }
+#- name: Download reference data
+#  hosts: localhost
+#  connection: local
+#  roles:
+#    - role: indigo-dc.galaxycloud-refdata
+#      galaxy_flavor: "{{ galaxy_flavor }}"
+#      get_refdata: '{{ get_refdata }}'
+#      refdata_repository_name: '{{ refdata_repository_name }}'
+#      refdata_provider_type: '{{ refdata_provider_type }}'
+#      refdata_provider: '{{ refdata_provider }}'
+#      refdata_token: '{{ refdata_token }}'
+#      refdata_cvmfs_server_url: '{{ refdata_cvmfs_server_url }}'
+#      refdata_cvmfs_repository_name: '{{ refdata_cvmfs_repository_name }}'
+#      refdata_cvmfs_key_file: '{{ refdata_cvmfs_key_file }}'
+#      refdata_cvmfs_proxy_url: 'DIRECT'
+#      #refdata_cvmfs_proxy_port: 80

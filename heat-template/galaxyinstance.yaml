@@ -31,19 +31,19 @@ parameters:
     type: string
     description: The Availability Zone to launch the instance.
     default: nova
-  volume_size:
+  vol1_size:
     type: number
     description: Size of the volume to be created.
     default: 1
-  mountpoint:
+  vol1_mountpoint:
     type: string
     description: The directory to provide to the user
     default: /export
-  ref_volume_size:
+  vol2_size:
     type: number
     description: Size of the volume to be created.
     default: 1
-  ref_mountpoint:
+  vol2_mountpoint:
     type: string
     description: The directory to provide to the user
     default: /refdata
@@ -70,8 +70,60 @@ parameters:
   ssh_pub_key:
     type: string
     description: User ssh public key
+  os_storage:
+    type: string
+    description: Storage type (Iaas Block Storage (default), Onedaata, Filesystem encryption)
+    default: "IaaS"
+  userdata_token:
+    type: string
+    description: Access token for onedata space
+    default: "not_a_token"
+  userdata_provider:
+    type: string
+    description: default OneProvider
+    default: "not_a_provider_url"
+  userdata_space:
+    type: string
+    description: Onedata space
+    default: "galaxy"
+  refdata_repository_name:
+    type: string
+    description: Onedata space name, CernVM-FS repository name or subdirectory downaload name
+    default: 'elixir-italy.galaxy.refdata'
+  refdata_provider_type:
+    type: string
+    description: Select Reference data provider type (Onedata, CernVM-FS or download)
+    default: 'cvmfs'
+  refdata_provider:
+    type: string
+    description: Oneprovider for reference data
+    default: 'not_a_provider'
+  refdata_token:
+    type: string
+    description: Access token for reference data
+    default: 'not_a_token'
+  refdata_cvmfs_server_url:
+    type: string
+    description: CernVM-FS server, replica or stratum-zero
+    default: 'server_url'
+  refdata_cvmfs_repository_name:
+    type: string
+    description: Reference data CernVM-FS repository name
+    default: 'not_a_cvmfs_repository_name'
+  refdata_cvmfs_key_file:
+    type: string
+    description: CernVM-FS public key
+    default: 'not_a_key'
+  refdata_cvmfs_proxy_url:
+    type: string
+    description: CernVM-FS proxy url
+    default: 'DIRECT'
+  refdata_cvmfs_proxy_port:
+    type: number
+    description: CernVM-FS proxy port
+    default: 80
 
-##################################
+
 resources:
 
   #________________________________
@@ -81,10 +133,10 @@ resources:
     properties:
       group: script
       inputs:
-      - name: userdata_mountpoint
-      - name: userdata_volid
-#      - name: refdata_mountpoint
-#      - name: refdata_volid
+      - name: vol1_mountpoint
+      - name: vol1_id
+#      - name: vol2_mountpoint
+#      - name: vol2_id
       config: { get_file: setup.sh }
 
   ansible_setup_deployment:
@@ -93,10 +145,10 @@ resources:
       config: {get_resource: ansible_setup_config}
       server: {get_resource: galaxy_server}  
       input_values:
-        userdata_mountpoint: { get_param: mountpoint }
-        userdata_volid: { get_resource: userdata_cinder_volume }
-#        refdata_mountpoint:  { get_param: ref_mountpoint }
-#        refdata_volid: { get_resource: refdata_cinder_volume }
+        vol1_mountpoint: { get_param: vol1_mountpoint }
+        vol1_id: { get_resource: vol1_cinder_volume }
+#        vol2_mountpoint:  { get_param: vol2_mountpoint }
+#        vol2_volid: { get_resource: vol2_cinder_volume }
 
   #________________________________
   # galaxy softwareconfig
@@ -110,6 +162,10 @@ resources:
       - name: galaxy_release
       - name: galaxy_flavor
       - name: galaxy_instance_key_pub
+      - name: os_storage
+      - name: userdata_token
+      - name: userdata_provider
+      - name: userdata_space
       config: { get_file: playbook.yml }
 
   galaxy_deployment:
@@ -125,6 +181,10 @@ resources:
         galaxy_release: {get_param: release}
         galaxy_flavor: {get_param: flavor}
         galaxy_instance_key_pub: {get_param: ssh_pub_key}
+        os_storage: { get_param: os_storage }
+        userdata_token: { get_param: userdata_token }
+        userdata_provider: { get_param: userdata_provider }
+        userdata_space: { get_param: userdata_space }
   #__________________________________
   # galaxy server deployment
   galaxy_server:
@@ -141,32 +201,32 @@ resources:
       user_data_format: SOFTWARE_CONFIG
 
   #__________________________________
-  # User data volume
-  userdata_cinder_volume:
+  # Volume 1
+  vol1_cinder_volume:
     type: OS::Cinder::Volume
     properties:
-      size: { get_param: volume_size }
+      size: { get_param: vol1_size }
       availability_zone: { get_param: availability_zone }
 
-  userdata_volume_attachment:
+  vol1_attachment:
     type: OS::Cinder::VolumeAttachment
     properties:
-      volume_id: { get_resource: userdata_cinder_volume }
+      volume_id: { get_resource: vol1_cinder_volume }
       instance_uuid: { get_resource: galaxy_server }
       mountpoint: null
 
 #  #__________________________________
-#  # Reference data volume  
-#  refdata_cinder_volume:
+#  # Volume 2
+#  vol2_cinder_volume:
 #    type: OS::Cinder::Volume
 #    properties:
-#      size: { get_param: ref_volume_size }
+#      size: { get_param: vol1_size }
 #      availability_zone: { get_param: availability_zone }
 
 #  refdata_volume_attachment:
 #    type: OS::Cinder::VolumeAttachment
 #    properties:
-#      volume_id: { get_resource: refdata_cinder_volume }
+#      volume_id: { get_resource: vol1_cinder_volume }
 #      instance_uuid: { get_resource: galaxy_server }
 #      mountpoint: null
 
@@ -206,4 +266,4 @@ outputs:
     value: { get_param: vm_name }
   volumeUuid:
     description: Resource ID assigned to the newly created volume attached to instance
-    value: { get_resource: userdata_cinder_volume }
+    value: { get_resource: vol1_cinder_volume }
