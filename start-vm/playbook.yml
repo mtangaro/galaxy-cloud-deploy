@@ -2,6 +2,8 @@
 - name: Apply Galaxy Role
   hosts: localhost
   connection: local
+  become_user: root
+  become: true
   roles:
 #    - role: indigo-dc.galaxycloud-os
 #      os_storage: '{{ os_storage }}'
