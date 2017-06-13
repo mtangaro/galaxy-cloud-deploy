@@ -1,0 +1,167 @@
+heat_template_version: 2014-10-16
+
+description: >
+  This template deploy a CernVM-FS Stratum Zero server
+
+
+##################################
+parameters:
+  key_name:
+    type: string
+    description: Name of a KeyPair
+    default: ROBOT
+  vm_name:
+    type: string
+    label: VM name
+    default: cvmfs-stack
+  image_id:
+    type: string
+    label: Image ID
+    description: "Ubuntu 16.04"
+    default: 9ba220c2-7205-484b-bd19-d4af8194d298
+  instance_type:
+    type: string
+    label: Instance Type
+    description: Type of instance (flavor) to be used
+    default: small
+  availability_zone:
+    type: string
+    description: The Availability Zone to launch the instance.
+    default: nova
+  vol1_size:
+    type: number
+    description: Size of the volume to be created.
+    default: 1
+  vol1_mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /export
+  vol2_size:
+    type: number
+    description: Size of the volume to be created.
+    default: 1
+  vol2_mountpoint:
+    type: string
+    description: The directory to provide to the user
+    default: /refdata
+  net_id:
+    type: string
+    description: ID of public sub network into which servers get deployed
+    default: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333
+
+resources:
+
+#  #________________________________
+#  # CernVM-FS software configuration
+#  cvmfs_config:
+#    type: OS::Heat::SoftwareConfig
+#    properties:
+#      group: script
+#      inputs:
+#      - name: vol1_mountpoint
+#      - name: vol1_volid
+#      - name: vol2_mountpoint
+#      - name: vol2_volid
+#      config: { get_file: setup.sh }
+
+#  cvmfs_deployment:
+#    type: OS::Heat::SoftwareDeployment
+#    properties:
+#      config: {get_resource: cvmfs_config}
+#      server: {get_resource: cvmfs_server}
+#      input_values:
+#        vol1_mountpoint: { get_param: vol1_mountpoint }
+#        vol1_volid: { get_resource: vol1_cinder_volume }
+#        vol2_mountpoint:  { get_param: vol2_mountpoint }
+#        vol2_volid: { get_resource: vol2_cinder_volume }
+
+  #__________________________________
+  # cvmfs server deployment
+  cvmfs_server:
+    type: OS::Nova::Server
+    properties:
+      name: { get_param: vm_name }
+      key_name: { get_param: key_name }
+      image: { get_param: image_id }
+      availability_zone: { get_param: availability_zone }
+      flavor: { get_param: instance_type }
+      networks:
+        - network: { get_param: net_id }
+      security_groups: [ { get_resource: server_security_group } ]
+      user_data:
+        str_replace:
+          template: { get_file: setup.sh }
+          params:
+            $vol1_mountpoint: { get_param: vol1_mountpoint }
+            $vol1_volid: { get_resource: vol1_cinder_volume }
+#            $vol2_mountpoint:  { get_param: vol2_mountpoint }
+#            $vol2_volid: { get_resource: vol2_cinder_volume }
+      user_data_format: RAW
+
+  #__________________________________
+  # /var/spool/cvmfs volume
+  vol1_cinder_volume:
+    type: OS::Cinder::Volume
+    properties:
+      size: { get_param: vol1_size }
+      availability_zone: { get_param: availability_zone }
+
+  vol1_volume_attachment:
+    type: OS::Cinder::VolumeAttachment
+    properties:
+      volume_id: { get_resource: vol1_cinder_volume }
+      instance_uuid: { get_resource: cvmfs_server }
+      mountpoint: null
+
+  #__________________________________
+  # /srv/cvmfs volume  
+#  vol2_cinder_volume:
+#    type: OS::Cinder::Volume
+#    properties:
+#      size: { get_param: vol2_size }
+#      availability_zone: { get_param: availability_zone }
+#
+#  vol2_volume_attachment:
+#   type: OS::Cinder::VolumeAttachment
+#   properties:
+#     volume_id: { get_resource: vol2_cinder_volume }
+#     instance_uuid: { get_resource: cvmfs_server }
+#     mountpoint: null
+
+  #__________________________________
+  # Security group  
+  server_security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      description: Add security group rules for server
+      name: security-group
+      rules:
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 22
+          port_range_max: 22
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: icmp
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 21
+          port_range_max: 21
+        - remote_ip_prefix: 0.0.0.0/0
+          protocol: tcp
+          port_range_min: 80
+          port_range_max: 80
+
+##################################
+outputs:
+  vmIp:
+    description: The IP address of the deployed instance
+    value: { get_attr: [cvmfs_server, first_address] }
+  vmUuid:
+    description: Resource ID assigned to the newly created instance
+    value: { get_resource: cvmfs_server }
+  vmName:
+    description: vm name 
+    value: { get_param: vm_name }
+  volumeUuid:
+    description: Resource ID assigned to the newly created volume attached to instance
+    value: { get_resource: vol1_cinder_volume }
