@@ -14,14 +14,14 @@ if [[ -r /etc/os-release ]]; then
     . /etc/os-release
     echo $ID > $LOGFILE
     if [ "$ID" = "ubuntu" ]; then
-        echo "Distribution: Ubuntu. Using apt" > $LOGFILE
+        echo "Distribution: Ubuntu. Using apt" >> $LOGFILE
         apt-get -y install software-properties-common &>> $LOGFILE
         apt-add-repository -y ppa:ansible/ansible &>> $LOGFILE
         apt-get -y update &>> $LOGFILE
         #apt-get -y upgrade &>> $LOGFILE
         apt-get -y install ansible git vim python-pycurl wget &>> $LOGFILE
     else
-        echo "Distribution: CentOS. Using yum" > $LOGFILE
+        echo "Distribution: CentOS. Using yum" >> $LOGFILE
         yum install -y epel-release &>> $LOGFILE
         yum update -y &>> $LOGFILE
         yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing 
@@ -55,29 +55,52 @@ ansible-playbook /tmp/playbook.yml &>> $LOGFILE
 
 #________________________________
 # Stop postgresql, nginx, proftpd, supervisord, galaxy
-#systemctl stop postgresql-9.6
-#systemctl stop nginx
-#systemctl stop supervisord.service
-#systemctl stop proftpd
-#galaxyctl stop galaxy
+
+# stop postgres
+echo 'Stop postgresql' &>> $LOGFILE
+if [ "$ID" = "ubuntu" ]; then
+  echo "Distribution: Ubuntu." >> $LOGFILE
+  systemctl stop postgresql &>> $LOGFILE
+else
+  echo "Distribution: CentOS." >> $LOGFILE
+  systemctl stop postgresql-9.6 &>> $LOGFILE
+fi
+
+# stop nginx
+echo 'Stop nginx' &>> $LOGFILE
+systemctl stop nginx &>> $LOGFILE
+
+# stop proftpd
+echo 'Stop proftpd' &>> $LOGFILE
+systemctl stop proftpd &>> $LOGFILE
+
+# stop galaxy
+echo 'Stop Galaxy' &>> $LOGFILE
+galaxyctl stop galaxy &>> $LOGFILE
+
+# shutdown supervisord
+echo 'Stop supervisord' &>> $LOGFILE
+kill -INT `cat /var/run/supervisord.pid` &>> $LOGFILE
 
 #________________________________
 # Remove ansible
-
+echo 'Removing ansible' &>> $LOGFILE
 if [ "$ID" = "ubuntu" ]; then
-  echo "Distribution: Ubuntu. Using apt" > $LOGFILE
+  echo "Distribution: Ubuntu. Using apt." >> $LOGFILE
   apt-get -y autoremove ansible &>> $LOGFILE
 else
-  echo "Distribution: CentOS. Using yum" > $LOGFILE
+  echo "Distribution: CentOS. Using yum." >> $LOGFILE
   yum remove -y ansible &>> $LOGFILE
 fi
 
 #________________________________
 # Remove ansible role
+echo 'Removing indigo-dc.galaxycloud' &>> $LOGFILE
 rm -rf /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
 
 #________________________________
 # Remove cloud-init artifact
+echo 'Removing cloud-init artifact' &>> $LOGFILE
 rm /var/lib/cloud/instance &>> $LOGFILE
 rm -rf /var/lib/cloud/instances/* &>> $LOGFILE
 rm -rf /var/lib/cloud/data/* &>> $LOGFILE
