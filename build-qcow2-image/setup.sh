@@ -46,7 +46,7 @@ git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /etc/ansible
 cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
 
 # Run role
-wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/start-vm/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
+wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/build-qcow2-image/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
 
 ansible-playbook /tmp/playbook.yml &>> $LOGFILE
 
