@@ -4,7 +4,7 @@ description: setup server
 
 resources:
   vm_os:
-    type: vm.yaml
+    type: galaxyinstance.yaml
     properties:
       key_name: mtangaro-key
       vm_name: galaxy_server

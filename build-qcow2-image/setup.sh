@@ -25,7 +25,7 @@ if [[ -r /etc/os-release ]]; then
         yum install -y epel-release &>> $LOGFILE
         yum update -y &>> $LOGFILE
         yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing 
-        yum install -y git vim  &>> $LOGFILE
+        yum install -y git vim wget  &>> $LOGFILE
     fi
 else
     echo "Not running a distribution with /etc/os-release available" > $LOGFILE
