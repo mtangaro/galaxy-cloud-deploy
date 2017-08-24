@@ -48,11 +48,7 @@ resources:
       networks:
         - network: { get_param: net_id }
       security_groups: [ { get_resource: server_security_group } ]
-      user_data:
-        str_replace:
-          template: { get_file: setup.sh }
-          params:
-            $foo: { get_param: vm_name }
+      user_data: { get_file: setup.sh }
       user_data_format: RAW
 
   #__________________________________

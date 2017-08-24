@@ -5,7 +5,7 @@ now=$(date +"-%b-%d-%y-%H%M%S")
 echo "Start log ${now}" > $LOGFILE
 
 #________________________________
-# Copy ansible roles
+# Copy and run ansible roles
 
 #---
 # Install Ansible
@@ -41,17 +41,30 @@ sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\'
 #---
 # Install role
 #ansible-galaxy install indigo-dc.galaxycloud,devel &>> $LOGFILE
-BRANCH="master"
+BRANCH="devel"
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
 cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
 
 # Run role
 wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/build-qcow2-image/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
-
 ansible-playbook /tmp/playbook.yml &>> $LOGFILE
 
 #________________________________
 # Install cvmfs packages
+
+echo 'Install cvmfs client' &>> $LOGFILE
+if [ "$ID" = "ubuntu" ]; then
+  echo "Distribution: Ubuntu." >> $LOGFILE
+  wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb -O /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
+  sudo dpkg -i /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
+  rm -f /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
+  sudo apt-get update &>> $LOGFILE
+  apt-get install -y cvmfs cvmfs-config-default &>> $LOGFILE
+else
+  echo "Distribution: CentOS." >> $LOGFILE
+  yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm &>> $LOGFILE
+  yum install -y cvmfs cvmfs-config-default &>> $LOGFILE
+fi
 
 #________________________________
 # Stop postgresql, nginx, proftpd, supervisord, galaxy
@@ -68,7 +81,7 @@ fi
 
 # stop nginx
 echo 'Stop nginx' &>> $LOGFILE
-systemctl stop nginx &>> $LOGFILE
+/usr/sbin/nginx -s stop &>> $LOGFILE
 
 # stop proftpd
 echo 'Stop proftpd' &>> $LOGFILE
@@ -76,7 +89,7 @@ systemctl stop proftpd &>> $LOGFILE
 
 # stop galaxy
 echo 'Stop Galaxy' &>> $LOGFILE
-galaxyctl stop galaxy &>> $LOGFILE
+/usr/local/bin/galaxyctl stop galaxy &>> $LOGFILE
 
 # shutdown supervisord
 echo 'Stop supervisord' &>> $LOGFILE
