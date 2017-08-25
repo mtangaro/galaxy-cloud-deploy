@@ -74,18 +74,22 @@ echo 'Stop postgresql' &>> $LOGFILE
 if [ "$ID" = "ubuntu" ]; then
   echo "Distribution: Ubuntu." >> $LOGFILE
   systemctl stop postgresql &>> $LOGFILE
+  systemctl disable postgresql &>> $LOGFILE
 else
   echo "Distribution: CentOS." >> $LOGFILE
   systemctl stop postgresql-9.6 &>> $LOGFILE
+  systemctl disable postgresql-9.6 &>> $LOGFILE
 fi
 
 # stop nginx
 echo 'Stop nginx' &>> $LOGFILE
 /usr/sbin/nginx -s stop &>> $LOGFILE
+systemctl disable nginx &>> $LOGFILE
 
 # stop proftpd
 echo 'Stop proftpd' &>> $LOGFILE
 systemctl stop proftpd &>> $LOGFILE
+systemctl disable proftpd &>> $LOGFILE
 
 # stop galaxy
 echo 'Stop Galaxy' &>> $LOGFILE
