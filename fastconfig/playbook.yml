@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   roles:
-    - role: indigo-dc.galaxycloud
+    - role: indigo-dc.galaxycloud-fastconfig
       GALAXY_ADMIN_EMAIL: "ma.tangaro@gmail.com"
       GALAXY_ADMIN_USERNAME: "mtangaro"
       galaxy_instance_description: "fastconfig"
