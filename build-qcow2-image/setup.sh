@@ -114,9 +114,6 @@ rm -rf /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
 #________________________________
 # Remove cloud-init artifact
 echo 'Removing cloud-init artifact' &>> $LOGFILE
-rm /var/lib/cloud/instance &>> $LOGFILE
-rm -rf /var/lib/cloud/instances/* &>> $LOGFILE
-rm -rf /var/lib/cloud/data/* &>> $LOGFILE
-rm /var/lib/cloud/sem/config_scripts_per_once.once &>> $LOGFILE
+sudo rm -rf /var/lib/cloud/* &>> $LOGFILE
 rm /var/log/cloud-init.log &>> $LOGFILE
 rm /var/log/cloud-init-output.log &>> $LOGFILE
