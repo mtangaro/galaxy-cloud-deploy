@@ -4,63 +4,9 @@
   connection: local
   roles:
     - role: indigo-dc.galaxycloud
-      GALAXY_ADMIN_EMAIL: "admin@elixir-italy.org"
-      GALAXY_ADMIN_USERNAME: "admin" 
-      GALAXY_VERSION: "release_17.05"
+      GALAXY_ADMIN_EMAIL: "ma.tangaro@gmail.com"
+      GALAXY_ADMIN_USERNAME: "mtangaro"i
+      galaxy_instance_description: "fastconfig"
       galaxy_instance_key_pub: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
-      set_pgsql_random_password: false
-      set_proftpd_random_password: false
-      galaxy_db_dir: '/home/galaxy/galaxy/database'
       tool_deps_path: '/home/galaxy/tool_deps'
       conda_prefix: '/home/galaxy/galaxy/tool_deps/_conda'
-      job_work_dir: 'database/jobs_directory'
-
-#- name: Install tools
-#  hosts: localhost
-#  connection: local
-#  ###gather_facts: False
-#  gather_subset: network # Only for testing
-#  pre_tasks:
-#    - name: Wait Galaxy is up
-#      uri: url="http://{{ ansible_default_ipv4.address }}/galaxy/"
-#      register: result
-#      until: result.status == 200
-#      retries: 30
-#      delay: 10
-#    - name: Get tool-list
-#      get_url:
-#        url: "https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml"
-#        dest: "/tmp/"
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#  vars:
-#    galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
-#    galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
-#    galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
-#  roles:
-#    - role: indigo-dc.galaxy-tools
-#      when: galaxy_flavor != 'galaxy-no-tools'
-
-- name: Remove ssh keys
-  hosts: localhost
-  connection: local
-  pre_tasks:
-    - set_fact:
-        galaxy_user: 'galaxy'
-        galaxy_instance_key_pub: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
-
-  tasks:
-    - name: 'Inject ssh public key - {{ galaxy_user }}'
-      authorized_key:
-        user: '{{ galaxy_user }}'
-        key: '{{ galaxy_instance_key_pub }}'
-        state: absent
-    - name: 'Inject ssh public key - root'
-      authorized_key:
-        user: 'root'
-        key: '{{ galaxy_instance_key_pub }}'
-        state: absent
-    - name: 'Remove centos user'
-      user:
-        name: 'centos'
-        state: absent
-        remove: yes
