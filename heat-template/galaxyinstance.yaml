@@ -63,6 +63,10 @@ parameters:
     type: string
     description: Galaxy version
     default: "master"
+  export_dir:
+    type: string
+    description: Mountpoint directory for Galaxy
+    default: '/export'
   flavor:
     type: string
     description: Galaxy flavor for tools installation
@@ -126,7 +130,14 @@ parameters:
     type: number
     description: CernVM-FS proxy port
     default: 80
-
+  galaxy_lrms:
+    type: string
+    description: select lrms. Test only, slurm will not be deployed
+    default: 'local'
+  refdata_dir:
+    type: string
+    description: Mountpoint directory for Reference Data
+    default: '/refdata'
 
 resources:
 
@@ -166,6 +177,8 @@ resources:
       - name: galaxy_release
       - name: galaxy_flavor
       - name: galaxy_instance_key_pub
+      - name: export_dir
+      - name: galaxy_lrms
       - name: os_storage
       - name: userdata_token
       - name: userdata_provider
@@ -180,6 +193,7 @@ resources:
       - name: refdata_cvmfs_key_file
       - name: refdata_cvmfs_proxy_url
       - name: refdata_cvmfs_proxy_port
+      - name: refdata_dir
       config: { get_file: playbook.yml }
 
   galaxy_deployment:
@@ -195,6 +209,8 @@ resources:
         galaxy_release: {get_param: release}
         galaxy_flavor: {get_param: flavor}
         galaxy_instance_key_pub: {get_param: ssh_pub_key}
+        export_dir: { get_param: export_dir }
+        galaxy_lrms: { get_param: galaxy_lrms }
         os_storage: { get_param: os_storage }
         userdata_token: { get_param: userdata_token }
         userdata_provider: { get_param: userdata_provider }
@@ -209,7 +225,7 @@ resources:
         refdata_cvmfs_key_file: { get_param: refdata_cvmfs_key_file }
         refdata_cvmfs_proxy_url: { get_param: refdata_cvmfs_proxy_url }
         refdata_cvmfs_proxy_port: { get_param: refdata_cvmfs_proxy_port }
-
+        refdata_dir: { get_param: refdata_dir }
 
   #__________________________________
   # galaxy server deployment

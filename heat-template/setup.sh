@@ -2,7 +2,7 @@
 
 OS_BRANCH="master"
 
-BRANCH="master"
+BRANCH="devel"
 
 TOOLS_BRANCH="master"
 #TOOLS_BRANCH="handler-include-fix"
@@ -43,9 +43,13 @@ if [[ -r /etc/os-release ]]; then
     else
         echo "Distribution: CentOS. Using yum" > $LOGFILE
         yum install -y epel-release &>> $LOGFILE
-        #yum update -y &>> $LOGFILE
-        yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing 
-        yum install -y git vim  &>> $LOGFILE
+        yum update -y &>> $LOGFILE
+        yum install -y ansible  &>> $LOGFILE #--enablerepo=epel-testing
+        yum install -y git vim &>> $LOGFILE
+        # get orchetrator ansible version
+        #yum remove -y ansible &>> $LOGFILE
+        #wget http://cbs.centos.org/kojifiles/packages/ansible/2.2.1.0/2.el7/noarch/ansible-2.2.1.0-2.el7.noarch.rpm -P /tmp
+        #yum --nogpgcheck localinstall -y /tmp/ansible-2.2.1.0-2.el7.noarch.rpm 
     fi
 else
     echo "Not running a distribution with /etc/os-release available" > $LOGFILE
@@ -63,7 +67,7 @@ sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\'
 # Install Ansible roles
 
 ansible-galaxy install indigo-dc.oneclient
-andible-galaxy install indigo-dc.cvmfs-client
+ansible-galaxy install indigo-dc.cvmfs-client
 
 # 1. indigo-dc.galaxycloud-os
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud-os.git /etc/ansible/roles/indigo-dc.galaxycloud-os &>> $LOGFILE
@@ -78,5 +82,5 @@ git clone https://github.com/indigo-dc/ansible-galaxy-tools.git /etc/ansible/rol
 cd /etc/ansible/roles/indigo-dc.galaxy-tools && git checkout $OS_TOOLS &>> $LOGFILE
 
 # 4. indigo-dc.galaxycloud-refdata
-git clone https://github.com/mtangaro/ansible-role-galaxycloud-refdata.git /etc/ansible/roles/indigo-dc.galaxycloud-refdata &>> $LOGFILE
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud-refdata.git /etc/ansible/roles/indigo-dc.galaxycloud-refdata &>> $LOGFILE
 cd /etc/ansible/roles/indigo-dc.galaxycloud-refdata && git checkout $REFDATA_BRANCH &>> $LOGFILE

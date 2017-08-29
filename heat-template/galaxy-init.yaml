@@ -6,9 +6,11 @@ resources:
   vm_os:
     type: galaxyinstance.yaml
     properties:
+      # Instance customization
       key_name: mtangaro-key
       vm_name: galaxy-indigo-test
       image_id: 5e648fd9-ddb7-452a-b5f6-09f4e1ac0b97 # CentOS-7-x86_64-HEAT-1704
+#      image_id: c5089f99-bc76-40e4-a891-5ff348b340b5 # Ubuntu 14.04 HEAT
       instance_type: small #4cpu-4GB-20dsk
       availability_zone: nova
       vol1_size: 10
@@ -16,23 +18,28 @@ resources:
       vol2_size: 1
       vol2_mountpoint: /refdata
       net_id: fe82ef7b-4bb7-4c1e-b4ec-ec5c1b0c7333 #pub-ip
+      # Galaxy configuration
       admin_username: "mtangaro"
       admin_mailaddr: "ma.tangaro@gmail.com"
-      release: "release_17.01" # "master" # Galaxy release version
+      release: "master" #"release_17.01" # "master" # Galaxy release version
       ssh_pub_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
+      export_dir: '/export'
+      # LRMS (local or slurm)
+      galaxy_lrms: 'local'
       # indigo-dc.galaxycloud-os
-      os_storage: 'onedata'
-      userdata_provider: 'indigo-wp3-onep.recas.ba.infn.it'
+      os_storage: 'IaaS'
+      userdata_provider: 'oneprovider2.cloud.ba.infn.it'
       userdata_token: 'MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzYmlkZW500aWZpZXIgaG5SZHR00ZXo4ODV00clZIY1NmcVNnMnhRZjBMREtHQmdVa2trdE42RGtmTQowMDFhY2lkIHRpbWUgPCAxNTI2OTc5ODAxCjAwMmZzaWduYXR1cmUglFgYYNlj01S9SvCecPjsRS022BCjruS4VQml3rr55b02mwK'
-      userdata_space: 'galaxy'
+      userdata_space: 'glx-test'
       # indigo-dc.galaxy-tools
       flavor: "galaxy-TESTING"
       # indigo-dc.galaxycloud-refdata
       get_refdata: true
+      refdata_dir: '/refdata'
       refdata_repository_name: 'elixir-italy.galaxy.refdata'
       refdata_provider_type: 'cvmfs'
       refdata_cvmfs_server_url: '90.147.102.186'
       refdata_cvmfs_repository_name: 'elixir-italy.galaxy.refdata'
       refdata_cvmfs_key_file: 'elixir-italy.galaxy.refdata.pub'
       refdata_cvmfs_proxy_url: 'DIRECT'
-      #refdata_cvmfs_proxy_port: 80
+      #refdata_cvmfs90.147.102.11_proxy_port: 80
