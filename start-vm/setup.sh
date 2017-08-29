@@ -63,11 +63,11 @@ sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\'
 #---
 # Install role
 #ansible-galaxy install indigo-dc.galaxycloud,devel &>> $LOGFILE
-BRANCH="devel"
+BRANCH="master"
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
 cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
 
 # Run role
 wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/start-vm/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
 
-#ansible-playbook /tmp/playbook.yml &>> $LOGFILE 
+ansible-playbook /tmp/playbook.yml &>> $LOGFILE 
