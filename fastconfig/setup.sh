@@ -39,84 +39,21 @@ sed -i 's\^#local_tmp      = ~/.ansible/tmp.*$\local_tmp      = $HOME/.ansible/t
 sed -i 's\^#log_path = /var/log/ansible.log.*$\log_path = /var/log/ansible.log\' /etc/ansible/ansible.cfg
 
 #---
-# Install role
-#ansible-galaxy install indigo-dc.galaxycloud,devel &>> $LOGFILE
-BRANCH="devel"
-git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
-cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
+# Install roles
+ansible-galaxy install indigo-dc.oneclient
+ansible-galaxy install indigo-dc.cvmfs-client
+
+# 1. indigo-dc.galaxycloud-os
+OS_BRANCH="master"
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud-os.git /etc/ansible/roles/indigo-dc.galaxycloud-os &>> $LOGFILE
+cd /etc/ansible/roles/indigo-dc.galaxycloud-os && git checkout $OS_BRANCH &>> $LOGFILE
+
+# 2. indigo-dc.galaxycloud-fastconfig
+BRANCH="master"
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud-fastconfig.git /etc/ansible/roles/indigo-dc.galaxycloud-fastconfig &>> $LOGFILE
+cd /etc/ansible/roles/indigo-dc.galaxycloud-fastconfig && git checkout $BRANCH &>> $LOGFILE
 
 # Run role
-wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/build-qcow2-image/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
+wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/fastconfig/playbook.yml -O /tmp/playbook.yml &>> $LOGFILE
+
 ansible-playbook /tmp/playbook.yml &>> $LOGFILE
-
-#________________________________
-# Install cvmfs packages
-
-echo 'Install cvmfs client' &>> $LOGFILE
-if [ "$ID" = "ubuntu" ]; then
-  echo "Distribution: Ubuntu." >> $LOGFILE
-  wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb -O /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
-  sudo dpkg -i /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
-  rm -f /tmp/cvmfs-release-latest_all.deb &>> $LOGFILE
-  sudo apt-get update &>> $LOGFILE
-  apt-get install -y cvmfs cvmfs-config-default &>> $LOGFILE
-else
-  echo "Distribution: CentOS." >> $LOGFILE
-  yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm &>> $LOGFILE
-  yum install -y cvmfs cvmfs-config-default &>> $LOGFILE
-fi
-
-#________________________________
-# Stop postgresql, nginx, proftpd, supervisord, galaxy
-
-# stop postgres
-echo 'Stop postgresql' &>> $LOGFILE
-if [ "$ID" = "ubuntu" ]; then
-  echo "Distribution: Ubuntu." >> $LOGFILE
-  systemctl stop postgresql &>> $LOGFILE
-else
-  echo "Distribution: CentOS." >> $LOGFILE
-  systemctl stop postgresql-9.6 &>> $LOGFILE
-fi
-
-# stop nginx
-echo 'Stop nginx' &>> $LOGFILE
-/usr/sbin/nginx -s stop &>> $LOGFILE
-
-# stop proftpd
-echo 'Stop proftpd' &>> $LOGFILE
-systemctl stop proftpd &>> $LOGFILE
-
-# stop galaxy
-echo 'Stop Galaxy' &>> $LOGFILE
-/usr/local/bin/galaxyctl stop galaxy &>> $LOGFILE
-
-# shutdown supervisord
-echo 'Stop supervisord' &>> $LOGFILE
-kill -INT `cat /var/run/supervisord.pid` &>> $LOGFILE
-
-#________________________________
-# Remove ansible
-echo 'Removing ansible' &>> $LOGFILE
-if [ "$ID" = "ubuntu" ]; then
-  echo "Distribution: Ubuntu. Using apt." >> $LOGFILE
-  apt-get -y autoremove ansible &>> $LOGFILE
-else
-  echo "Distribution: CentOS. Using yum." >> $LOGFILE
-  yum remove -y ansible &>> $LOGFILE
-fi
-
-#________________________________
-# Remove ansible role
-echo 'Removing indigo-dc.galaxycloud' &>> $LOGFILE
-rm -rf /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
-
-#________________________________
-# Remove cloud-init artifact
-echo 'Removing cloud-init artifact' &>> $LOGFILE
-rm /var/lib/cloud/instance &>> $LOGFILE
-rm -rf /var/lib/cloud/instances/* &>> $LOGFILE
-rm -rf /var/lib/cloud/data/* &>> $LOGFILE
-rm /var/lib/cloud/sem/config_scripts_per_once.once &>> $LOGFILE
-rm /var/log/cloud-init.log &>> $LOGFILE
-rm /var/log/cloud-init-output.log &>> $LOGFILE
