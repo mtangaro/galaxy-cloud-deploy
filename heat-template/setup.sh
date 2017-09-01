@@ -8,6 +8,8 @@ TOOLS_BRANCH="master"
 #TOOLS_BRANCH="handler-include-fix"
 #TOOLS_BRANCH="handler-include-static-no"
 
+TOOLDEPS_BRANCH="master"
+
 REFDATA_BRANCH="master"
 
 #______________________________________
@@ -79,7 +81,10 @@ cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
 
 # 3. indigo-dc.galaxy-tools
 git clone https://github.com/indigo-dc/ansible-galaxy-tools.git /etc/ansible/roles/indigo-dc.galaxy-tools &>> $LOGFILE
-cd /etc/ansible/roles/indigo-dc.galaxy-tools && git checkout $OS_TOOLS &>> $LOGFILE
+cd /etc/ansible/roles/indigo-dc.galaxy-tools && git checkout $TOOLS_BRANCH &>> $LOGFILE
+
+git clone https://github.com/mtangaro/ansible-role-galaxycloud-tooldeps.git /etc/ansible/roles/indigo-dc.galaxycloud-tooldeps &>> $LOGFILE
+cd /etc/ansible/roles/indigo-dc.galaxycloud-tooldeps && git checkout $TOOLDEPS_BRANCH &>> $LOGFILE
 
 # 4. indigo-dc.galaxycloud-refdata
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud-refdata.git /etc/ansible/roles/indigo-dc.galaxycloud-refdata &>> $LOGFILE
