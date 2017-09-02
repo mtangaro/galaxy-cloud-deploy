@@ -63,18 +63,18 @@
       when: galaxy_lrms == 'slurm'
     - name: Get refdata-list
       get_url:
-        url: 'https://raw.githubusercontent.com/indigo-dc/Reference-data-galaxycloud-repository/master/cvmfs_server_keys/{{ refdata_cvmfs_key_file }}'
+        url: 'https://raw.githubusercontent.com/indigo-dc/Reference-data-galaxycloud-repository/master/cvmfs_server_keys/elixir-italy.galaxy.refdata.pub'
         dest: '/tmp'
   roles:
     - role: indigo-dc.galaxycloud-refdata
-      galaxy_flavor: "{{ galaxy_flavor }}"
-      get_refdata: '{{ get_refdata }}'
-      refdata_repository_name: '{{ refdata_repository_name }}'
-      refdata_provider_type: '{{ refdata_provider_type }}'
-      refdata_provider: '{{ refdata_provider }}'
-      refdata_token: '{{ refdata_token }}'
-      refdata_cvmfs_server_url: '{{ refdata_cvmfs_server_url }}'
-      refdata_cvmfs_repository_name: '{{ refdata_cvmfs_repository_name }}'
-      refdata_cvmfs_key_file: '{{ refdata_cvmfs_key_file }}'
+      galaxy_flavor: 'galaxy-TESTING'
+      get_refdata: 'true'
+      refdata_repository_name: 'elixir-italy.galaxy.refdata'
+      refdata_provider_type: 'cvmfs'
+      refdata_provider: 'provider_name'
+      refdata_token: 'access_token'
+      refdata_cvmfs_server_url: '90.147.102.186'
+      refdata_cvmfs_repository_name: 'elixir-italy.galaxy.refdata'
+      refdata_cvmfs_key_file: 'elixir-italy.galaxy.refdata.pub'
       refdata_cvmfs_proxy_url: 'DIRECT'
       #refdata_cvmfs_proxy_port 80
