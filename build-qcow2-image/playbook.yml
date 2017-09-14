@@ -43,7 +43,7 @@
       when: galaxy_flavor != 'galaxy-no-tools'
 
     - role: indigo-dc.galaxycloud-tooldeps
-      galaxy_instance_url: 'http://{{ ansible_default_ipv4_.address }}/galaxy/'
+      galaxy_instance_url: 'http://{{ ansible_default_ipv4.address }}/galaxy/'
 
 - name: Remove ssh keys
   hosts: localhost
