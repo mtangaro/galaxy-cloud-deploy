@@ -15,35 +15,35 @@
       conda_prefix: '/home/galaxy/_conda'
       job_work_dir: 'database/jobs_directory'
 
-#- name: Install tools
-#  hosts: localhost
-#  connection: local
-#  ###gather_facts: False
-#  gather_subset: network # Only for testing
-#  pre_tasks:
-#    - set_fact:
-#        galaxy_flavor: 'galaxy-NGS'
-#    - name: Wait Galaxy is up
-#      uri: url="http://{{ ansible_default_ipv4.address }}/galaxy/"
-#      register: result
-#      until: result.status == 200
-#      retries: 30
-#      delay: 10
-#    - name: Get tool-list
-#      get_url:
-#        url: "https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml"
-#        dest: "/tmp/"
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#  vars:
-#    galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
-#    galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
-#    galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
-#  roles:
-#    - role: indigo-dc.galaxy-tools
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#
-#    - role: indigo-dc.galaxycloud-tooldeps
-#      galaxy_instance_url: 'http://{{ ansible_default_ipv4_.address }}/galaxy/'
+- name: Install tools
+  hosts: localhost
+  connection: local
+  ###gather_facts: False
+  gather_subset: network # Only for testing
+  pre_tasks:
+    - set_fact:
+        galaxy_flavor: 'galaxy-TESTING'
+    - name: Wait Galaxy is up
+      uri: url="http://{{ ansible_default_ipv4.address }}/galaxy/"
+      register: result
+      until: result.status == 200
+      retries: 30
+      delay: 10
+    - name: Get tool-list
+      get_url:
+        url: "https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml"
+        dest: "/tmp/"
+      when: galaxy_flavor != 'galaxy-no-tools'
+  vars:
+    galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
+    galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
+    galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
+  roles:
+    - role: indigo-dc.galaxy-tools
+      when: galaxy_flavor != 'galaxy-no-tools'
+
+    - role: indigo-dc.galaxycloud-tooldeps
+      galaxy_instance_url: 'http://{{ ansible_default_ipv4_.address }}/galaxy/'
 
 - name: Remove ssh keys
   hosts: localhost
