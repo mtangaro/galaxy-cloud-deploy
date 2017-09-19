@@ -22,7 +22,7 @@
   gather_subset: network # Only for testing
   pre_tasks:
     - set_fact:
-        galaxy_flavor: 'galaxy-NGS'
+        galaxy_flavor: 'galaxy-TESTING'
     - name: Wait Galaxy is up
       uri: url="http://{{ ansible_default_ipv4.address }}/galaxy/"
       register: result
