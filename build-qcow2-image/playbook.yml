@@ -64,8 +64,8 @@
         user: 'root'
         key: '{{ galaxy_instance_key_pub }}'
         state: absent
-#    - name: 'Remove centos user'
-#      user:
-#        name: 'centos'
-#        state: absent
-#        remove: yes
+    - name: 'Remove centos user'
+      user:
+        name: 'centos'
+        state: absent
+        remove: yes
