@@ -5,52 +5,11 @@
   become_user: root
   become: true
   roles:
-#    - role: indigo-dc.galaxycloud-os
-#      os_storage: 'IaaS'
-#      GALAXY_ADMIN_EMAIL: 'galaxy_admin@lifewatch.eu'
-#      userdata_provider: 'oneprovider-test.cloud.ba.infn.it'
-#      userdata_token: 'MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzYmlkZW500aWZpZXIgdWRJMGlndXgtMXlsUExsRlp3RV9QUTlQSWlBUGlOMnloRS1BajRiUlJidwowMDFhY2lkIHRpbWUgPCAxNTM2NjQ4Nzk2CjAwMmZzaWduYXR1cmUgloMSlNiVepWnNb5tHT2qbFihs1s57X00HmM01mB01cxSJkK'
-#      userdata_space: 'galaxy'
-#      galaxy_instance_key_pub: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
-#      ###galaxy_lrms: 'slurm'
-
     - role: indigo-dc.galaxycloud
       GALAXY_ADMIN_EMAIL: "galaxy_admin@lifewatch.eu"
       GALAXY_ADMIN_USERNAME: "galaxy_admin" 
       GALAXY_VERSION: "release_17.05"
       galaxy_instance_key_pub: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDy787GZIVdHW7QV+Wu2q9q5k5CiTOq04ENioVig88IIVGNqi8qiX+3fhZx/w2hhlz6AePrYu8CfVPplCRdSMjP46av53V1M7r0+yqJvuk1PC2f/rSoEL95TvaeiV28+5Wy4MC58UvYuewuhIHcbfPiXHf3NEE3scd38GXCYKLhAP28mUQ950Ar4SoWv4irv21maJwkwqn5AYXcy1yrbBZtaTbQELVPa/E6X9j+k29bn32ITmmtKBA3ne/QlFRaaYI3XggvMXhhSSIYsJUdlSOjUTriB2DraHsxMGfOPjmPXkjvrXp9MfOzjMg10fb7K2Mda8u/ujK/dvx3BnhlSIpn marco@marco-Latitude-3440"
-#      set_pgsql_random_password: false
-#      init_type: "init"
-
-#- name: Install tools
-#  hosts: localhost
-#  connection: local
-#  ###gather_facts: False
-#  gather_subset: network # Only for testing
-#  pre_tasks:
-#    - set_fact:
-#        galaxy_flavor: 'galaxy-TESTING'
-#    - name: Wait Galaxy is up
-#      uri: url="http://{{ ansible_default_ipv4.address }}/galaxy/"
-#      register: result
-#      until: result.status == 200
-#      retries: 30
-#      delay: 10
-#    - name: Get tool-list
-#      get_url:
-#        url: "https://raw.githubusercontent.com/indigo-dc/Galaxy-flavors-recipes/master/galaxy-flavors/{{galaxy_flavor}}-tool-list.yml"
-#        dest: "/tmp/"
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#  vars:
-#    galaxy_tools_tool_list_files: [ "/tmp/{{ galaxy_flavor }}-tool-list.yml" ]
-#    galaxy_tools_galaxy_instance_url: "http://{{ ansible_default_ipv4.address }}/galaxy/"
-#    galaxy_tools_api_key: "GALAXY_ADMIN_API_KEY"
-#  roles:
-#    - role: indigo-dc.galaxy-tools
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#
-#    - role: indigo-dc.galaxycloud-tooldeps
-
 
 - name: Download reference data
   hosts: localhost
