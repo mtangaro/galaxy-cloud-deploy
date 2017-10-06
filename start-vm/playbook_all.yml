@@ -55,11 +55,6 @@
   hosts: localhost
   connection: local
   pre_tasks:
-    - set_fact:
-        galaxy_lrms: 'local'
-    - set_fact:
-        refdata_dir: '/home/refdata'
-      when: galaxy_lrms == 'slurm'
     - name: Get refdata-list
       get_url:
         url: 'https://raw.githubusercontent.com/indigo-dc/Reference-data-galaxycloud-repository/master/cvmfs_server_keys/elixir-italy.galaxy.refdata.pub'
@@ -68,6 +63,7 @@
     - role: indigo-dc.galaxycloud-refdata
       galaxy_flavor: 'galaxy-NGS'
       get_refdata: 'true'
+      refdata_dir: '/refdata'
       refdata_repository_name: 'elixir-italy.galaxy.refdata'
       refdata_provider_type: 'cvmfs'
       refdata_provider: 'provider_name'
