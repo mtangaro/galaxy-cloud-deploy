@@ -21,7 +21,6 @@
         dest: '/tmp'
   roles:
     - role: indigo-dc.galaxycloud-refdata
-      galaxy_flavor: 'galaxy-NGS'
       get_refdata: 'true'
       refdata_dir: '/refdata'
       refdata_repository_name: 'elixir-italy.galaxy.refdata'
