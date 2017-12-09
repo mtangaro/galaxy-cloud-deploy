@@ -15,15 +15,16 @@
       conda_prefix: '/home/galaxy/tool_deps/_conda'
       job_work_dir: 'database/jobs_directory'
 
-#- name: Install tools
-#  hosts: localhost
-#  connection: local
-#  roles:
-#    - role: indigo-dc.galaxycloud-tools
-#      galaxy_flavor: 'galaxy-rna-workbench'
-#      when: galaxy_flavor != 'galaxy-no-tools'
-#
-#    - role: indigo-dc.galaxycloud-tooldeps
+- name: Install tools
+  hosts: localhost
+  connection: local
+  roles:
+    - role: indigo-dc.galaxycloud-tools
+      galaxy_flavor: 'galaxy-rna-workbench'
+      move_datasets: false
+      when: galaxy_flavor != 'galaxy-no-tools'
+
+    - role: indigo-dc.galaxycloud-tooldeps
 
 - name: Post installation tasks
   hosts: localhost
