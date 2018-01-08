@@ -29,6 +29,7 @@
         galaxy_flavor: 'galaxy-TESTING'
   roles:
     - role: indigo-dc.galaxycloud-tools
+      Galaxy_flavor_recipe_branch: 'devel'
       when: galaxy_flavor != 'galaxy-no-tools'
 
     - role: indigo-dc.galaxycloud-tooldeps
@@ -44,7 +45,6 @@
         dest: '/tmp'
   roles:
     - role: indigo-dc.galaxycloud-refdata
-      galaxy_flavor: 'galaxy-TESTING'
       get_refdata: 'true'
       refdata_dir: '/refdata'
       refdata_repository_name: 'elixir-italy.galaxy.refdata'
