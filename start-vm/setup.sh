@@ -43,7 +43,7 @@ if [[ -r /etc/os-release ]]; then
     else
         echo "Distribution: CentOS. Using yum" > $LOGFILE
         yum install -y epel-release &>> $LOGFILE
-        yum update -y &>> $LOGFILE
+#        yum update -y &>> $LOGFILE
         yum groupinstall -y "Development Tools" &>> $LOGFILE
         yum install -y python-pip python-devel libffi-devel openssl-devel &>> $LOGFILE
         yum install -y git vim wget  &>> $LOGFILE
@@ -67,16 +67,16 @@ sed -i 's:#remote_tmp:remote_tmp:' /etc/ansible/ansible.cfg
 #________________________________
 # Install roles
 
-OS_BRANCH="master"
-BRANCH="master"
-TOOLS_BRANCH="master"
-TOOLDEPS_BRANCH="master"
-REFDATA_BRANCH="master"
+OS_BRANCH="devel"
+BRANCH="devel"
+TOOLS_BRANCH="devel"
+TOOLDEPS_BRANCH="galaxyctl"
+REFDATA_BRANCH="devel"
 
 # Dependencies
 ansible-galaxy install indigo-dc.galaxycloud-indigorepo &>> $LOGFILE
 ansible-galaxy install indigo-dc.oneclient &>> $LOGFILE
-ansible-galaxy install indigo-dc.cvmfs-client &>> $LOGFILE
+ansible-galaxy install indigo-dc.cvmfs-client,devel &>> $LOGFILE
 
 # 1. indigo-dc.galaxycloud-os
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud-os.git /etc/ansible/roles/indigo-dc.galaxycloud-os &>> $LOGFILE
@@ -86,9 +86,13 @@ cd /etc/ansible/roles/indigo-dc.galaxycloud-os && git checkout $OS_BRANCH &>> $L
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud.git /etc/ansible/roles/indigo-dc.galaxycloud &>> $LOGFILE
 cd /etc/ansible/roles/indigo-dc.galaxycloud && git checkout $BRANCH &>> $LOGFILE
 
-# 3. indigo-dc.galaxy-tools
-git clone https://github.com/indigo-dc/ansible-galaxy-tools.git /etc/ansible/roles/indigo-dc.galaxy-tools &>> $LOGFILE
-cd /etc/ansible/roles/indigo-dc.galaxy-tools && git checkout $TOOLS_BRANCH &>> $LOGFILE
+#### 3. indigo-dc.galaxy-tools
+#git clone https://github.com/indigo-dc/ansible-galaxy-tools.git /etc/ansible/roles/indigo-dc.galaxy-tools &>> $LOGFILE
+#cd /etc/ansible/roles/indigo-dc.galaxy-tools && git checkout $TOOLS_BRANCH &>> $LOGFILE
+
+# 3. indigo-dc.galaxycloud-tools
+git clone https://github.com/indigo-dc/ansible-role-galaxycloud-tools.git /etc/ansible/roles/indigo-dc.galaxycloud-tools &>> $LOGFILE
+cd /etc/ansible/roles/indigo-dc.galaxycloud-tools && git checkout $TOOLS_BRANCH &>> $LOGFILE
 
 git clone https://github.com/indigo-dc/ansible-role-galaxycloud-tooldeps.git /etc/ansible/roles/indigo-dc.galaxycloud-tooldeps &>> $LOGFILE
 cd /etc/ansible/roles/indigo-dc.galaxycloud-tooldeps && git checkout $TOOLDEPS_BRANCH &>> $LOGFILE
@@ -99,9 +103,7 @@ cd /etc/ansible/roles/indigo-dc.galaxycloud-refdata && git checkout $REFDATA_BRA
 
 #________________________________
 # Run play
-# playbook.yml -> galaxycloud-os, galaxycloud, galaxy-tools, tooldeps, refdata
-# galaxy-encrypt -> galaxy with encryption only
 
-PLAYBOOK="galaxy-encrypt.yml"
+PLAYBOOK="playbook_os.yml"
 wget https://raw.githubusercontent.com/mtangaro/galaxy-cloud-deploy/devel/start-vm/$PLAYBOOK -O /tmp/playbook.yml &>> $LOGFILE
-ansible-playbook /tmp/$PLAYBOOK &>> $LOGFILE 
+ansible-playbook /tmp/playbook.yml &>> $LOGFILE 

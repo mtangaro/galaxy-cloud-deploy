@@ -4,16 +4,19 @@ description: setup server
 
 resources:
   vm_os:
-    type: vm.yaml
+    type: galaxyinstance.yaml
     properties:
       key_name: mtangaro-key
       vm_name: galaxy_server
-      image_id: 9ba220c2-7205-484b-bd19-d4af8194d298 # ubuntu 16.04
-      #image_id: bd2ebc86-7930-4f90-af7b-ff94b982a2eb # CentOS 7
-      #image_id: 97da99b8-2007-4e5c-b244-665ee970941a # Ubuntu 16.04 Heat Enabled
-      instance_type: small #medium #4cpu-4GB-20dsk
+      #image_id: fb342843-d016-43f0-bb3a-7f9e5ec4011c # CentOS 7.4
+      #image_id: f38d4e87-cc7e-4035-921b-6b200a9ebaee # CentOS 7.4.1708
+      image_id: 0c4c232d-d90d-43da-b53a-ccbe8a6edc46 # CentOS 7 1708 BASE
+      #image_id: 0de96743-4a12-4470-b8b2-6dc260977a40 # CentOS 7
+      #image_id: 9ba220c2-7205-484b-bd19-d4af8194d298 # Ubuntu 16.04 LTS
+      #image_id: 303d8324-69a7-4372-be24-1d68703affd7 # Ubuntu 14.04.3 LTS
+      instance_type: medium #4cpu-4GB-20dsk
       availability_zone: nova
-      vol1_size: 1
+      vol1_size: 20
       vol1_mountpoint: /export
       vol2_size: 1
       vol2_mountpoint: /refdata
